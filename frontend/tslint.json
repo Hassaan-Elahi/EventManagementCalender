@@ -4,7 +4,8 @@
     "array-type": false,
     "arrow-parens": false,
     "deprecation": {
-      "severity": "warning"
+      "severity": "warning",
+      "no-trailing-whitespace": false
     },
     "component-class-suffix": true,
     "contextual-lifecycle": true,
