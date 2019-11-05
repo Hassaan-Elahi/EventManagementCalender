@@ -36,9 +36,11 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var routes_1 = require("./routes");
 var express = require('express');
 var typeorm_1 = require("typeorm");
+var routes_1 = require("./routes");
+var cors = require("cors");
+var bodyParser = require('body-parser');
 var PORT = 3000;
 // Connects to the messageDataDatabase -> then starts the express
 typeorm_1.createConnection()
@@ -47,6 +49,9 @@ typeorm_1.createConnection()
     return __generator(this, function (_a) {
         app = express();
         // Set all routes from routes folder
+        app.use(cors());
+        app.use(bodyParser.urlencoded({ extended: false }));
+        app.use(bodyParser.json());
         app.use('/', routes_1.default);
         server = app.listen(PORT, function () {
             console.log("Worker " + process.pid + " started on port " + PORT + "!");

@@ -13,7 +13,7 @@
                     <label class="font-weight-bold">Password</label>
                     <input name="password" type="password" class="form-control" [(ngModel)]="password"  placeholder="Password">
                 </div>
-                <button type="submit" class="btn-block btn-primary">login</button>
+                <button (click)="onSubmit()" type="button" class="btn-block btn-primary">login</button>
             </form>
         </div>
     </div>

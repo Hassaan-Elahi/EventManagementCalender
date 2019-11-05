@@ -5,8 +5,7 @@ const router = Router();
 
 
 
-router.get('', login);
-
+router.post('/login', login);
 
 	
 export default router;

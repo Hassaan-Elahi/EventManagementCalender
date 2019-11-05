@@ -4,17 +4,19 @@ import {User} from "../entity/user";
 
 export async function login (req: Request, res: Response) 
 {
-	const email = req.params.email;
-	const password = req.params.password;
+	const email = req.body.email;
+	const password = req.body.password;
 	const userRepo = getRepository(User);
 	
-	const user = await userRepo.findOne(email)
-	if (user && user.password === password)
+	const user = await userRepo.findOne({
+		where: { 'email': email}
+	})
+	if (user !== undefined && user.password === password)
 	{
-		res.json( {user}, 200, 'success' )
+		res.status(200).send(user)
 	}
 	else 
 	{
-		res.json( null, 400, 'unAuthorized' )	
+		res.status(401).send({ error: "unAuthorized"} )
 	}
 }

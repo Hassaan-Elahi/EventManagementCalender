@@ -38,14 +38,30 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var typeorm_1 = require("typeorm");
 var user_1 = require("../entity/user");
-function login(email, password) {
+function login(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var user;
+        var email, password, userRepo, user;
         return __generator(this, function (_a) {
-            user = typeorm_1.getRepository(user_1.User);
-            user.findOneOrFail(email);
-            return [2 /*return*/];
+            switch (_a.label) {
+                case 0:
+                    email = req.body.email;
+                    password = req.body.password;
+                    userRepo = typeorm_1.getRepository(user_1.User);
+                    return [4 /*yield*/, userRepo.findOne({
+                            where: { 'email': email }
+                        })];
+                case 1:
+                    user = _a.sent();
+                    if (user !== undefined && user.password === password) {
+                        res.status(200).send(user);
+                    }
+                    else {
+                        res.status(401).send({ error: "unAuthorized" });
+                    }
+                    return [2 /*return*/];
+            }
         });
     });
 }
+exports.login = login;
 //# sourceMappingURL=login.js.map

@@ -1,13 +1,26 @@
 import { Injectable } from '@angular/core';
-import { LoginComponent} from '../login/login.component';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpClientModule, HttpHeaders} from '@angular/common/http';
 
 @Injectable({
-  providedIn: LoginComponent
+  providedIn: 'root'
 })
 export class LoginService {
 
   constructor(private http: HttpClient) {
-    
+  }
+  
+  getHeaders()
+  {
+	  return new HttpHeaders({
+		  'Content-Type': 'application/json',
+	  });
+  }
+  
+  login(data: any)
+  {
+  	
+  	return this.http
+	    .post('http://localhost:3000/login',  data, { headers: this.getHeaders()} )
+	    .toPromise()
   }
 }
