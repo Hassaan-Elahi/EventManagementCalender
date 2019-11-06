@@ -1,9 +1,22 @@
 
-<ag-grid-angular
-        style="width: 1000px; height: 1000px;"
-        class="ag-theme-balham"
-        [rowData]="rowData"
-        [columnDefs]="columnDefs"
-        (cellClicked)="onCellClicked($event)"
->
-</ag-grid-angular>
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-4">
+            <app-monthpicker (change)="onChange($event) "></app-monthpicker>
+        </div>
+        <div class="col-md-4">
+            <ag-grid-angular
+                    (cellClicked)="onCellClicked($event)"
+                    [columnDefs]="columnDefs"
+                    [rowData]="rowData"
+                    class="ag-theme-balham"
+                    style="width: 565px; height: 308px;"
+            >
+            </ag-grid-angular>
+        </div>
+        <div class="col-md-8">
+            <button (click)="openModal()" type="button" class="btn btn-info">Create Event</button>
+        </div>
+    </div>
+</div>
+
