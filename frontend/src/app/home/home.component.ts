@@ -12,20 +12,21 @@ import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 export class HomeComponent implements OnInit {
   
   modalRef: BsModalRef;
-  rowData = [];
+  public rowData = [];
   
   columnDefs = [
-    {headerName: 'Sunday', field: '0',width: 80,   cellRenderer: (item) => {this.renderCell(item)}},
-    {headerName: 'Monday', field: '1',width: 80, cellRenderer: (item) => {this.renderCell(item) }},
-    {headerName: 'Tuesday', field: '2',width: 80, cellRenderer: (item) => {this.renderCell(item) }},
-    {headerName: 'Wednesday', field: '3',width: 80, cellRenderer: (item) => {this.renderCell(item) }},
-    {headerName: 'Thursday', field: '4',width: 80, cellRenderer: (item) => {this.renderCell(item) }},
-    {headerName: 'Friday', field: '5',width: 80, cellRenderer: (item) => {this.renderCell(item) }},
-    {headerName: 'Saturday', field: '6',width: 80, cellRenderer: (item) => {this.renderCell(item) }},
+    {headerName: 'Sunday', field: '0',width: 80},
+    {headerName: 'Monday', field: '1',width: 80},
+    {headerName: 'Tuesday', field: '2',width: 80},
+    {headerName: 'Wednesday', field: '3',width: 80},
+    {headerName: 'Thursday', field: '4',width: 80},
+    {headerName: 'Friday', field: '5',width: 80},
+    {headerName: 'Saturday', field: '6',width: 80},
     
   ];
   
 
+  
   constructor(public modalService: BsModalService) { }
   
   

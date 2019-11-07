@@ -11,9 +11,9 @@ import {EventService} from "../services/event.service";
 export class EventCreationModalComponent implements OnInit {
   
   public name: string;
-  public date: Date;
-  public startTime: Date;
-  public endTime: Date;
+  public strDate: string;
+  public startTime: any;
+  public endTime: any;
   public description: string;
   
   constructor(public modalRef: BsModalRef, public tostr: ToastrService, 
@@ -25,10 +25,19 @@ export class EventCreationModalComponent implements OnInit {
   
   onCreateEvent()
   {
-    const data = { name: this.name, startTime: this.startTime, endTime: this.endTime, description: this.description, 
-                   date: this.date }; 
-                   
-    this.eventService.createEvent(data)
+         
+    
+    // can also use moment here
+    const date =  new Date(Date.parse(this.strDate));
+    date.setHours(this.startTime.split(':')[0], this.startTime.split(':')[1])
+    this.startTime = new Date(date);
+    date.setHours(this.endTime.split(':')[0], this.endTime.split(':')[1])
+    this.endTime = new Date(date)
+    const data = { name: this.name, startTime: this.startTime, endTime: this.endTime, description: this.description,
+      date: this.strDate };
+
+    
+      this.eventService.createEvent(data)
         .then(res => {
       
           this.tostr.success("Event has been created successfully")

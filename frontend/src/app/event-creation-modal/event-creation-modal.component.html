@@ -1,49 +1,28 @@
-
-<p>ldsfjlksjflksjflksaflsaf
-sfsalfjsalfjslakjf
-aslkfjlksajflksajflkasjf
-asfsajflkasjflkksjadf
-asdfljsalkfjaslkfjlkasfaslf
-
-lasflsajfioelfie 
-w</p>
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Create Event</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                
-                <div class="form-group">
-                    <label for="recipient-name" class="col-form-label">Event Name</label>
-                    <input [(ngModel)]="name" type="text" class="form-control" id="recipient-name">
-                </div>
-                <div class="form-group">
-                    <label for="event-date" class="col-form-label">Event Date</label>
-                    <input [(ngModel)]="date" type="text" class="form-control" id="event-date">
-                </div>
-                <div class="form-group">
-                    <label for="event-startTime" class="col-form-label">Event Date</label>
-                    <input [(ngModel)]="startTime" type="text" class="form-control" id="event-startTime">
-                </div>
-                <div class="form-group">
-                    <label for="event-endTime" class="col-form-label">Event Date</label>
-                    <input [(ngModel)]="endTime" type="text" class="form-control" id="event-endTime">
-                </div>
-                <div class="form-group">
-                    <label for="description" class="col-form-label">Description</label>
-                    <input [(ngModel)]="description" type="text" class="form-control" id="description">
-                </div>
-           
-            </div>
-            <div class="modal-footer">
-                <button (click)="modalRef.hide()" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button (click)="onCreateEvent" type="button" class="btn btn-primary">Create</button>
-            </div>
-        </div>
+<div class="modal-body">
+    
+    <div class="form-group">
+        <label for="recipient-name" class="col-form-label font-weight-bold ">Event Name</label>
+        <input [(ngModel)]="name" type="text" class="form-control" id="recipient-name">
     </div>
+    <div class="form-group">
+        <label for="event-date" class="col-form-label font-weight-bold ">Event Date</label>
+        <input [(ngModel)]="strDate" type="date" class="form-control" id="event-date">
+    </div>
+    <div class="form-group">
+        <label for="event-startTime" class="col-form-label font-weight-bold ">Event Start Time</label>
+        <input [(ngModel)]="startTime" type="time" class="form-control" id="event-startTime">
+    </div>
+    <div class="form-group">
+        <label for="event-endTime" class="col-form-label font-weight-bold ">Event End Time</label>
+        <input [(ngModel)]="endTime" type="time" class="form-control" id="event-endTime">
+    </div>
+    <div class="form-group">
+        <label for="description" class="col-form-label font-weight-bold ">Description</label>
+        <textarea [(ngModel)]="description" type="text" class="form-control" id="description"></textarea>
+    </div>
+
+</div>
+<div class="modal-footer">
+    <button (click)="modalRef.hide()" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+    <button (click)="onCreateEvent()" type="button" class="btn btn-primary">Create</button>
 </div>
