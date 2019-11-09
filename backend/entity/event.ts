@@ -1,5 +1,6 @@
 import {Entity, PrimaryGeneratedColumn, Column, ManyToOne} from "typeorm";
 import {User} from "./user";
+import {Runtime} from "inspector";
 
 @Entity()
 export class Event {

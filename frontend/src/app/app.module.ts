@@ -16,6 +16,7 @@ import { EventCreationModalComponent } from './event-creation-modal/event-creati
 import { ModalModule } from 'ngx-bootstrap';
 import {ToastrService} from "ngx-toastr";
 import {ToastrModule} from "ngx-toastr";
+import { ViewEventModalComponent } from './view-event-modal/view-event-modal.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import {ToastrModule} from "ngx-toastr";
     HomeComponent,
     MonthpickerComponent,
     EventCreationModalComponent,
+    ViewEventModalComponent,
   ],
   imports: [
     BrowserModule,
@@ -34,7 +36,8 @@ import {ToastrModule} from "ngx-toastr";
     HttpClientModule,
     BrowserAnimationsModule,
     IgxCalendarModule,
-    ModalModule.forRoot()
+    ModalModule.forRoot(),
+    BrowserAnimationsModule,
       
   ],
   providers: [
@@ -43,7 +46,7 @@ import {ToastrModule} from "ngx-toastr";
       
   ],
   bootstrap: [AppComponent],
-  entryComponents: [EventCreationModalComponent]
+  entryComponents: [EventCreationModalComponent, ViewEventModalComponent]
 })
 export class AppModule {
 }
