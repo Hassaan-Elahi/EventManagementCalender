@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpClientModule, HttpHeaders} from '@angular/common/http';
+import {environment} from "../../environments/environment";
 
 
 @Injectable({
@@ -9,34 +10,31 @@ export class EventService {
 
   constructor(private http: HttpClient) { }
   
-  getHeaders() {
-    return new HttpHeaders({
-      'Content-Type': 'application/json',
-    });
-  }
-  
   
   public getAllEvents (month, year) {
-    
     return this.http
-        .get(`http://localhost:3000/events`, {params: {year: year, month: month} ,headers: this.getHeaders()} )
+        .get(environment.baseUrl + 'events', {params: {year: year, month: month}} )
         .toPromise()
   }
   
   
   public createEvent (data) {
-    
     return this.http
-        .post(`http://localhost:3000/create-event`, data, { headers: this.getHeaders()} )
+        .post(environment.baseUrl + 'create-event', data )
         .toPromise()
   }
   
   
+  public deleteEvent(id) {
+    return this.http
+        .delete(environment.baseUrl + `delete-event/${id}`)
+        .toPromise();
+  }
+  
   
   public getEvent (id) {
-    
     return this.http
-        .get(`http://localhost:3000/get-event/${id}`, { headers: this.getHeaders()} )
+        .get(environment.baseUrl + `get-event/${id}`)
         .toPromise()
   }
   

@@ -13,15 +13,17 @@ import {environment} from "../../environments/environment";
 })
 export class EventCreationModalComponent implements OnInit {
   
-  public name: string;
-  public startTime: any;
-  public endTime: any;
+  public id: any = null;
+  public name: string = "";
+  public startTime: any = null;
+  public endTime: any = null;
   public description: string = "";
   private readOnly = true;
   private isUpdateHidden = false;
   private isSaveHidden = true;
   private isDeleteHidden = false;
-  public type;
+  public type: string;
+
   
   constructor(public modalRef: BsModalRef, public tostr: ToastrService, 
               public eventService: EventService) { }
@@ -50,31 +52,59 @@ export class EventCreationModalComponent implements OnInit {
   }
   
   
+  IsEventValid(data: { name: string; description: string; startTime: any; endTime: any }) {
+    
+    const mStartTime = moment(this.startTime, environment.dateTimeFormat);
+    const mEndTime = moment(this.endTime, environment.dateTimeFormat)
+    if (data.name === '' || data.name === null) {
+      
+      this.tostr.error("Please provide Name for the Event");
+      return false;
+      
+    }
+    else if (data.startTime === null || data.endTime === null) {
+      this.tostr.error("Please provide start and end time for the event");
+      return false;
+      
+    } else if(mStartTime > mEndTime) {
+      this.tostr.error("End Time cannot be less than start Time");
+      return false;
+  
+    } else if (mEndTime.diff(mStartTime, 'days', true) > 2) {
+      this.tostr.error("Event duration cannot be more than two(2) days")
+  
+    } else {
+      return true;
+    }
+      
+  }
+  
+  
   onSaveEvent()
   {
-         
-    
-  
-    const sTime = moment(this.startTime, environment.dateTimeFormat);
-    const eTime = moment(this.endTime, environment.dateTimeFormat);
-    
     //.utc().format() converts into utc and outputs time into utc format
     //.local().format() converts into local and outputs time into local format
-    const data = { name: this.name, startTime: sTime.utc().format(environment.dateTimeFormat), endTime: eTime.utc().format(environment.dateTimeFormat), description: this.description,};
+    const event = { name: this.name, startTime: this.startTime, endTime: this.endTime, description: this.description,};
     
-    
+    if(this.IsEventValid(event)) {
+  
+      const sTime = moment(this.startTime, environment.dateTimeFormat);
+      const eTime = moment(this.endTime, environment.dateTimeFormat);
+  
+      const data = { name: this.name, startTime: sTime.utc().format(environment.dateTimeFormat), endTime: eTime.utc().format(environment.dateTimeFormat), description: this.description,};
       this.eventService.createEvent(data)
-        .then(res => {
-      
-          this.tostr.success("Event has been created successfully");
-          this.modalRef.hide()
-          
-        })
-        .catch(err => {
-          
-          this.tostr.error(err.message);
-          this.modalRef.hide();
-        })
+          .then(res => {
+        
+            this.tostr.success("Event has been created successfully");
+            this.modalRef.hide()
+        
+          })
+          .catch(err => {
+        
+            this.tostr.error(err.message);
+            this.modalRef.hide();
+          })
+    }
   }
   
   onUpdateEvent() {
@@ -83,6 +113,15 @@ export class EventCreationModalComponent implements OnInit {
   
 
   onDeleteEvent() {
+    
+    this.eventService.deleteEvent(this.id).then( res => {
+      this.tostr.success("Event has been deleted successfully")
+      this.modalRef.hide();
+      
+    }).catch(err => {
+      this.tostr.error(err.message);
+      this.modalRef.hide()
+    })
     
   }
 }

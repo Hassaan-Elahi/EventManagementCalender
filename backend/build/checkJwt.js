@@ -36,24 +36,34 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var init1572942161536 = /** @class */ (function () {
-    function init1572942161536() {
-    }
-    init1572942161536.prototype.up = function (queryRunner) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                return [2 /*return*/];
-            });
+var jwt = require("jsonwebtoken");
+var environment_1 = require("./environment");
+exports.checkJwt = function () {
+    return function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+        var token, jwtPayload, userId, newToken;
+        return __generator(this, function (_a) {
+            if (!req.cookies.token || req.cookies.token === null || req.cookies.token === '') {
+                console.error('Jwt Token Not available');
+                res.status(401).json({ message: 'unauthorized' });
+            }
+            token = req.cookies.token;
+            // Try to validate the token and get data
+            try {
+                jwtPayload = jwt.verify(token, environment_1.environment.JWT_SECRET);
+                res.locals.currentUserId = jwtPayload.userId;
+            }
+            catch (exception) {
+                // If token is not valid, respond with 401 (unauthorized)
+                // console.error('exception in checking jwt token', exception);
+                res.status(401).json({ message: 'unauthorized' });
+            }
+            userId = jwtPayload;
+            newToken = jwt.sign(userId, environment_1.environment.JWT_SECRET);
+            res.cookie("token", newToken, { httpOnly: true });
+            // Call the next middleware or controller
+            next();
+            return [2 /*return*/];
         });
-    };
-    init1572942161536.prototype.down = function (queryRunner) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                return [2 /*return*/];
-            });
-        });
-    };
-    return init1572942161536;
-}());
-exports.init1572942161536 = init1572942161536;
-//# sourceMappingURL=1572942161536-init.js.map
+    }); };
+};
+//# sourceMappingURL=checkJwt.js.map

@@ -2,9 +2,26 @@ import { getRepository } from 'typeorm'
 import { Request, Response } from 'express';
 import {User} from "../entity/user";
 import {Event} from "../entity/event";
-let config =  require('../config.json');
 
 
+
+export async function deleteEvent(req: Request, res: Response) {
+	
+	const id = parseInt(req.params.id);
+	const eventRepo = getRepository(Event);
+	
+	try {
+	
+		await eventRepo.delete(id);
+		res.status(200).json( {deleted: true} );
+		
+	} catch (e) {
+
+		res.status(400).json( { deleted: false, message: e })
+		
+	}
+	
+}
 
 export async function getAllEvents(req: Request, res: Response) {
 	
@@ -67,7 +84,7 @@ export async function createEvent(req: Request, res: Response) {
 	event.startTime = startTime;
 	event.endTime = endTime;
 	event.description = description;
-	event.id = 1; 
+	event.user = await getRepository(User).findOneOrFail(1); //must be changed here
 	
 	
 	try {

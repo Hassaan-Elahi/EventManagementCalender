@@ -1,3 +1,4 @@
-{
-  "dateTimeFormat":  "YYYY-MM-DDThh:mm"
+export const config{
+  "dateTimeFormat":  "YYYY-MM-DDThh:mm",
+  "JWT_SECRET": "gtwsWhEm8Q2HrMUAX",
 }

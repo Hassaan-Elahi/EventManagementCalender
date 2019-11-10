@@ -37,10 +37,37 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var typeorm_1 = require("typeorm");
+var user_1 = require("../entity/user");
 var event_1 = require("../entity/event");
+function deleteEvent(req, res) {
+    return __awaiter(this, void 0, void 0, function () {
+        var id, eventRepo, e_1;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    id = parseInt(req.params.id);
+                    eventRepo = typeorm_1.getRepository(event_1.Event);
+                    _a.label = 1;
+                case 1:
+                    _a.trys.push([1, 3, , 4]);
+                    return [4 /*yield*/, eventRepo.delete(id)];
+                case 2:
+                    _a.sent();
+                    res.status(200).json({ deleted: true });
+                    return [3 /*break*/, 4];
+                case 3:
+                    e_1 = _a.sent();
+                    res.status(400).json({ deleted: false, message: e_1 });
+                    return [3 /*break*/, 4];
+                case 4: return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.deleteEvent = deleteEvent;
 function getAllEvents(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var month, year, date, eventRepo, events, e_1;
+        var month, year, date, eventRepo, events, e_2;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -61,8 +88,8 @@ function getAllEvents(req, res) {
                     res.status(200).json({ data: events });
                     return [3 /*break*/, 4];
                 case 3:
-                    e_1 = _a.sent();
-                    res.status(500).json({ message: e_1 });
+                    e_2 = _a.sent();
+                    res.status(500).json({ message: e_2 });
                     return [3 /*break*/, 4];
                 case 4: return [2 /*return*/];
             }
@@ -98,9 +125,9 @@ function getEvent(req, res) {
 exports.getEvent = getEvent;
 function createEvent(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var name, startTime, endTime, description, eventRepo, event, e_2;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
+        var name, startTime, endTime, description, eventRepo, event, _a, e_3;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
                 case 0:
                     name = req.body.name;
                     startTime = req.body.startTime;
@@ -112,20 +139,23 @@ function createEvent(req, res) {
                     event.startTime = startTime;
                     event.endTime = endTime;
                     event.description = description;
-                    event.id = 1;
-                    _a.label = 1;
+                    _a = event;
+                    return [4 /*yield*/, typeorm_1.getRepository(user_1.User).findOneOrFail(1)];
                 case 1:
-                    _a.trys.push([1, 3, , 4]);
-                    return [4 /*yield*/, eventRepo.save(event)];
+                    _a.user = _b.sent(); //must be changed here
+                    _b.label = 2;
                 case 2:
-                    _a.sent();
-                    res.status(200).json({ message: "Event Saved Successfully" });
-                    return [3 /*break*/, 4];
+                    _b.trys.push([2, 4, , 5]);
+                    return [4 /*yield*/, eventRepo.save(event)];
                 case 3:
-                    e_2 = _a.sent();
-                    res.status(500).json({ message: e_2 });
-                    return [3 /*break*/, 4];
-                case 4: return [2 /*return*/];
+                    _b.sent();
+                    res.status(200).json({ message: "Event Saved Successfully" });
+                    return [3 /*break*/, 5];
+                case 4:
+                    e_3 = _b.sent();
+                    res.status(500).json({ message: e_3 });
+                    return [3 /*break*/, 5];
+                case 5: return [2 /*return*/];
             }
         });
     });

@@ -1,6 +1,8 @@
 import { getRepository } from 'typeorm'
 import { Request, Response } from 'express';
 import {User} from "../entity/user";
+import * as jwt from 'jsonwebtoken';
+import {environment} from "../environment";
 
 export async function login (req: Request, res: Response) 
 {
@@ -10,10 +12,15 @@ export async function login (req: Request, res: Response)
 	
 	const user = await userRepo.findOne({
 		where: { 'email': email}
-	})
+	});
 	if (user !== undefined && user.password === password)
 	{
-		res.status(200).send(user)
+		// need to add a expiry here
+		const token = jwt.sign(user.id, environment.JWT_SECRET);
+		
+		res.cookie("token", token, { httpOnly:true });
+		res.status(200).json( {user: user, token: token} );
+		
 	}
 	else 
 	{

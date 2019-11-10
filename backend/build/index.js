@@ -39,7 +39,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var express = require('express');
 var typeorm_1 = require("typeorm");
 var routes_1 = require("./routes");
-var cors = require("cors");
+var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var PORT = 3000;
 // Connects to the messageDataDatabase -> then starts the express
@@ -48,10 +48,16 @@ typeorm_1.createConnection()
     var app, server;
     return __generator(this, function (_a) {
         app = express();
-        // Set all routes from routes folder
-        app.use(cors());
+        // simple middle ware to handle cross-origin requests
+        app.use(function (req, res, next) {
+            res.header("Access-Control-Allow-Origin", "http://localhost:4200");
+            res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+            res.header("Access-Control-Allow-credentials", true);
+            next();
+        });
         app.use(bodyParser.urlencoded({ extended: false }));
         app.use(bodyParser.json());
+        app.use(cookieParser());
         app.use('/', routes_1.default);
         server = app.listen(PORT, function () {
             console.log("Worker " + process.pid + " started on port " + PORT + "!");

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { LoginService} from '../services/login.service';
 import {Router} from "@angular/router";
+import {CookieService} from "ngx-cookie-service";
 
 @Component({
   selector: 'app-login',
@@ -13,7 +14,8 @@ export class LoginComponent implements OnInit {
   public password = '';
   constructor(
   	private loginService: LoginService,
-    private router: Router) 
+    private router: Router,
+    private cookieService: CookieService) 
     { }
 
   ngOnInit() {
@@ -27,7 +29,7 @@ export class LoginComponent implements OnInit {
 		this.loginService.login(data)
 			.then( data => 
 			{
-				localStorage.setItem('user', data['user']);
+				localStorage.setItem('currentUser',data['user']);
 				this.router.navigate(['home']);
 			
 			})

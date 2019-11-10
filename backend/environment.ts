@@ -3,9 +3,9 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false,
   dateTimeFormat: 'YYYY-MM-DDThh:mm',
-  baseUrl: 'http://localhost:3000/'
+  JWT_SECRET: "gtwsWhEm8Q2HrMUAX",
+  JWT_DEFAULT_EXPIRY: 400
 };
 
 /*

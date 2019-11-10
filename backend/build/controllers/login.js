@@ -38,9 +38,11 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var typeorm_1 = require("typeorm");
 var user_1 = require("../entity/user");
+var jwt = require("jsonwebtoken");
+var environment_1 = require("../environment");
 function login(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var email, password, userRepo, user;
+        var email, password, userRepo, user, token;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -53,7 +55,9 @@ function login(req, res) {
                 case 1:
                     user = _a.sent();
                     if (user !== undefined && user.password === password) {
-                        res.status(200).send(user);
+                        token = jwt.sign(user.id, environment_1.environment.JWT_SECRET);
+                        res.cookie("token", token, { httpOnly: true });
+                        res.status(200).json({ user: user, token: token });
                     }
                     else {
                         res.status(401).send({ error: "unAuthorized" });
