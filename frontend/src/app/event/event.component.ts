@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {BsModalRef, BsModalService} from "ngx-bootstrap";
 import {EventService} from "../services/event.service";
 import {ToastrService} from "ngx-toastr";
 import {EventCreationModalComponent} from "../event-creation-modal/event-creation-modal.component";
+import {EventTableComponent} from "../event-table/event-table.component";
 
 @Component({
   selector: 'app-event',
@@ -10,9 +11,14 @@ import {EventCreationModalComponent} from "../event-creation-modal/event-creatio
   styleUrls: ['./event.component.css']
 })
 export class EventComponent implements OnInit {
+  
+  @ViewChild(EventTableComponent, {static: false})
+  
+  eventTable: EventTableComponent;
   public eventModal: BsModalRef;
   public monthIndex: number;
   public year: number;
+
   
   constructor(private modalService: BsModalService, private eventService: EventService,
               private toastr: ToastrService) {}
@@ -27,6 +33,10 @@ export class EventComponent implements OnInit {
       initialState :{
         type: 'creation'
       }
+    });
+    const modal = this.modalService.onHide.subscribe( result => {
+      this.eventTable.ReloadData();
+      modal.unsubscribe();
     });
   }
   

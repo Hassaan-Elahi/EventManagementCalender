@@ -8,6 +8,7 @@ var router = express_1.Router();
 router.post('/login', login_1.login);
 router.get('/events', checkJwt_1.checkJwt(), home_1.getAllEvents);
 router.post('/create-event', checkJwt_1.checkJwt(), home_1.createEvent);
+router.patch('/update-event', checkJwt_1.checkJwt(), home_1.updateEvent);
 router.get('/get-event/:id', checkJwt_1.checkJwt(), home_1.getEvent);
 router.delete('/delete-event/:id', checkJwt_1.checkJwt(), home_1.deleteEvent);
 exports.default = router;

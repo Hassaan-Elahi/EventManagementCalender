@@ -25,6 +25,14 @@ export class EventService {
   }
   
   
+  public updateEvent (data) {
+    return this.http
+        .patch(environment.baseUrl + 'update-event', data )
+        .toPromise()
+  }
+  
+  
+  
   public deleteEvent(id) {
     return this.http
         .delete(environment.baseUrl + `delete-event/${id}`)

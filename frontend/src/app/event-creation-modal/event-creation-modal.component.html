@@ -21,8 +21,9 @@
 </div>
 <div class="modal-footer">
     <button (click)="modalRef.hide()" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-    <button [hidden]="isUpdateHidden" (click)="onUpdateEvent()" type="button" class="btn btn-info">Update</button>
+    <button [hidden]="isUpdateHidden" (click)="this.changeView('create'); isUpdateSentHidden=false; isSaveHidden=true" type="button" class="btn btn-info">Update</button>
     <button [hidden]="isSaveHidden"  (click)="onSaveEvent()" type="button" class="btn btn-primary">Save</button>
     <button [hidden]="isDeleteHidden" (click)="onDeleteEvent()" type="button" class="btn btn-danger">Delete</button>
+    <button [hidden]="isUpdateSentHidden" (click)="onUpdateEvent()" type="button" class="btn btn-info">Save Update</button>
 
 </div>

@@ -73,24 +73,25 @@ export class EventTableComponent implements OnInit {
     if (event.value.event) {
       
       this.eventService.getEvent(event.value.event).then(event => {
+  
+  
+        const sTime = moment.utc(event['startTime']);
         
-        const date = moment(event['startTime']);
         this.eventModal = this.modalService.show(EventCreationModalComponent, {
           initialState: {
             type: 'view',
             id: event['id'],
             name: event['name'],
-            startTime: moment.utc(event['startTime']).format(environment.dateTimeFormat),
-            endTime: moment.utc(event['endTime']).format(environment.dateTimeFormat),
+            startTime: moment.utc(event['startTime']).local().format(environment.dateTimeFormat),
+            endTime: moment.utc(event['endTime']).local().format(environment.dateTimeFormat),
             description: event['description'],
-            parent: this,
+
           }
-        })
-  
+        });
         const modal = this.modalService.onHide.subscribe( result => {
           this.ReloadData();
           modal.unsubscribe();
-        })
+        });
         
       }).catch(err => {
         

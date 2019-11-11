@@ -39,6 +39,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var typeorm_1 = require("typeorm");
 var user_1 = require("../entity/user");
 var event_1 = require("../entity/event");
+var moment = require("moment");
+var environment_1 = require("../environment");
 function deleteEvent(req, res) {
     return __awaiter(this, void 0, void 0, function () {
         var id, eventRepo, e_1;
@@ -67,13 +69,13 @@ function deleteEvent(req, res) {
 exports.deleteEvent = deleteEvent;
 function getAllEvents(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var month, year, date, eventRepo, events, e_2;
+        var month, year, date, eventRepo, events, newEvents, _i, events_1, e, startTime, endTime, e_2;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     month = req.query.month;
                     year = req.query.year;
-                    date = new Date(year, month);
+                    date = moment(new Date(year, month));
                     eventRepo = typeorm_1.getRepository(event_1.Event);
                     _a.label = 1;
                 case 1:
@@ -81,10 +83,17 @@ function getAllEvents(req, res) {
                     return [4 /*yield*/, eventRepo.find()];
                 case 2:
                     events = _a.sent();
-                    //filtering here
-                    events.filter(function (e) {
-                        return (e.startTime.getMonth() == date.getMonth() && e.startTime.getFullYear() == date.getFullYear());
-                    });
+                    newEvents = [];
+                    for (_i = 0, events_1 = events; _i < events_1.length; _i++) {
+                        e = events_1[_i];
+                        startTime = moment.utc(e.startTime, environment_1.environment.dateTimeFormat);
+                        endTime = moment.utc(e.endTime, environment_1.environment.dateTimeFormat);
+                        if (startTime.get('month') == date.get('month') && startTime.get('year') == date.get('year')) {
+                            e.startTime = startTime.format(environment_1.environment.dateTimeFormat);
+                            e.endTime = endTime.format(environment_1.environment.dateTimeFormat);
+                            newEvents.push(e);
+                        }
+                    }
                     res.status(200).json({ data: events });
                     return [3 /*break*/, 4];
                 case 3:
@@ -110,6 +119,8 @@ function getEvent(req, res) {
                     return [4 /*yield*/, eventRepo.findOneOrFail(parseInt(req.params.id))];
                 case 2:
                     event = _a.sent();
+                    event.startTime = moment.utc(event.startTime, environment_1.environment.dateTimeFormat).format(environment_1.environment.dateTimeFormat);
+                    event.endtTime = moment.utc(event.endTime, environment_1.environment.dateTimeFormat).format(environment_1.environment.dateTimeFormat);
                     res.status(200).json(event);
                     return [3 /*break*/, 4];
                 case 3:
@@ -161,4 +172,45 @@ function createEvent(req, res) {
     });
 }
 exports.createEvent = createEvent;
+function updateEvent(req, res) {
+    return __awaiter(this, void 0, void 0, function () {
+        var id, name, startTime, endTime, description, eventRepo, event, _a, e_4;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
+                case 0:
+                    id = req.body.id;
+                    name = req.body.name;
+                    startTime = req.body.startTime;
+                    endTime = req.body.endTime;
+                    description = req.body.description;
+                    eventRepo = typeorm_1.getRepository(event_1.Event);
+                    return [4 /*yield*/, eventRepo.findOneOrFail(id)];
+                case 1:
+                    event = _b.sent();
+                    event.name = name;
+                    event.startTime = startTime;
+                    event.endTime = endTime;
+                    event.description = description;
+                    _a = event;
+                    return [4 /*yield*/, typeorm_1.getRepository(user_1.User).findOneOrFail(1)];
+                case 2:
+                    _a.user = _b.sent(); //must be changed here
+                    _b.label = 3;
+                case 3:
+                    _b.trys.push([3, 5, , 6]);
+                    return [4 /*yield*/, eventRepo.save(event)];
+                case 4:
+                    _b.sent();
+                    res.status(200).json({ message: "Event Saved Successfully" });
+                    return [3 /*break*/, 6];
+                case 5:
+                    e_4 = _b.sent();
+                    res.status(500).json({ message: e_4 });
+                    return [3 /*break*/, 6];
+                case 6: return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.updateEvent = updateEvent;
 //# sourceMappingURL=home.js.map

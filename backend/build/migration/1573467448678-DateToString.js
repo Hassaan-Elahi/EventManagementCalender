@@ -36,36 +36,24 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var express = require('express');
-var typeorm_1 = require("typeorm");
-var routes_1 = require("./routes");
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var PORT = 3000;
-// Connects to the messageDataDatabase -> then starts the express
-typeorm_1.createConnection()
-    .then(function (connection) { return __awaiter(void 0, void 0, void 0, function () {
-    var app, server;
-    return __generator(this, function (_a) {
-        app = express();
-        // simple middle ware to handle cross-origin requests
-        app.use(function (req, res, next) {
-            res.header("Access-Control-Allow-Origin", "http://localhost:4200");
-            res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-            res.header("Access-Control-Allow-credentials", true);
-            res.header("Access-Control-Allow-Methods", "PATCH, OPTIONS, GET, PUT, POST, DELETE, HEAD");
-            next();
+var DateToString1573467448678 = /** @class */ (function () {
+    function DateToString1573467448678() {
+    }
+    DateToString1573467448678.prototype.up = function (queryRunner) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/];
+            });
         });
-        app.use(bodyParser.urlencoded({ extended: false }));
-        app.use(bodyParser.json());
-        app.use(cookieParser());
-        app.use('/', routes_1.default);
-        server = app.listen(PORT, function () {
-            console.log("Worker " + process.pid + " started on port " + PORT + "!");
+    };
+    DateToString1573467448678.prototype.down = function (queryRunner) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/];
+            });
         });
-        server.keepAliveTimeout = 125000;
-        return [2 /*return*/];
-    });
-}); })
-    .catch(function (error) { return console.log(error); });
-//# sourceMappingURL=index.js.map
+    };
+    return DateToString1573467448678;
+}());
+exports.DateToString1573467448678 = DateToString1573467448678;
+//# sourceMappingURL=1573467448678-DateToString.js.map

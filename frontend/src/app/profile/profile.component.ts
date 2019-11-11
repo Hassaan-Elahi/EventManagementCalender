@@ -11,7 +11,7 @@ export class ProfileComponent implements OnInit {
   public name;
   public email;
   
-  constructor(private _cookieService: CookieService) { }
+  constructor() { }
 
   ngOnInit() {
     

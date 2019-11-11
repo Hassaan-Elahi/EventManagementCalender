@@ -22,6 +22,7 @@ export class EventCreationModalComponent implements OnInit {
   private isUpdateHidden = false;
   private isSaveHidden = true;
   private isDeleteHidden = false;
+  private isUpdateSentHidden = true;
   public type: string;
 
   
@@ -108,7 +109,34 @@ export class EventCreationModalComponent implements OnInit {
   }
   
   onUpdateEvent() {
-    this.changeView('create')
+  
+    const event = {name: this.name, startTime: this.startTime, endTime: this.endTime, description: this.description,};
+  
+    if (this.IsEventValid(event)) {
+    
+      const sTime = moment(this.startTime);
+      const eTime = moment(this.endTime);
+    
+      const data = {
+        id: this.id,
+        name: this.name,
+        startTime: sTime.utc().format(environment.dateTimeFormat),
+        endTime: eTime.utc().format(environment.dateTimeFormat),
+        description: this.description,
+      };
+      this.eventService.updateEvent(data)
+          .then(res => {
+          
+            this.tostr.success("Event has been update successfully");
+            this.modalRef.hide()
+          
+          })
+          .catch(err => {
+          
+            this.tostr.error(err.message);
+            this.modalRef.hide();
+          })
+    }
   }
   
 

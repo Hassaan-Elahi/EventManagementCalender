@@ -30,7 +30,7 @@ export class LoginComponent implements OnInit {
 			.then( data => 
 			{
 				localStorage.setItem('currentUser',JSON.stringify(data['user']));
-				this.router.navigate(['home']);
+				this.router.navigate(['home/event']);
 			
 			})
 			.catch( err => 

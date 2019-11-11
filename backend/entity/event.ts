@@ -12,10 +12,10 @@ export class Event {
 	name: string;
 	
 	@Column()
-	startTime: Date;
+	startTime: string;
 	
 	@Column()
-	endTime: Date;
+	endTime: string;
 	
 	@Column()
 	description: string;
