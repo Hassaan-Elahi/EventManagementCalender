@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  dateTimeFormat: 'YYYY-MM-DDThh:mm',
+  dateTimeFormat: 'YYYY-MM-DDTHH:mm',
   baseUrl: 'http://localhost:3000/'
 };
 

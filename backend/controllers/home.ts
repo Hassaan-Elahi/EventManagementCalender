@@ -41,8 +41,6 @@ export async function getAllEvents(req: Request, res: Response) {
 			const startTime = moment.utc(e.startTime, environment.dateTimeFormat);
 			const endTime = moment.utc(e.endTime, environment.dateTimeFormat);
 			if (startTime.get('month') == date.get('month') && startTime.get('year') == date.get('year')) {
-				e.startTime = startTime.format(environment.dateTimeFormat);
-				e.endTime = endTime.format(environment.dateTimeFormat)
 				newEvents.push(e);
 			}
 		}
@@ -65,8 +63,6 @@ export async function getEvent(req: Request, res: Response) {
 	try {
 	
 		event = await eventRepo.findOneOrFail(parseInt(req.params.id));
-		event.startTime = moment.utc(event.startTime, environment.dateTimeFormat).format(environment.dateTimeFormat);
-		event.endtTime = moment.utc(event.endTime, environment.dateTimeFormat).format(environment.dateTimeFormat);
 		res.status(200).json(event);
 		
 	} catch(err) {

@@ -89,8 +89,6 @@ function getAllEvents(req, res) {
                         startTime = moment.utc(e.startTime, environment_1.environment.dateTimeFormat);
                         endTime = moment.utc(e.endTime, environment_1.environment.dateTimeFormat);
                         if (startTime.get('month') == date.get('month') && startTime.get('year') == date.get('year')) {
-                            e.startTime = startTime.format(environment_1.environment.dateTimeFormat);
-                            e.endTime = endTime.format(environment_1.environment.dateTimeFormat);
                             newEvents.push(e);
                         }
                     }
@@ -119,8 +117,6 @@ function getEvent(req, res) {
                     return [4 /*yield*/, eventRepo.findOneOrFail(parseInt(req.params.id))];
                 case 2:
                     event = _a.sent();
-                    event.startTime = moment.utc(event.startTime, environment_1.environment.dateTimeFormat).format(environment_1.environment.dateTimeFormat);
-                    event.endtTime = moment.utc(event.endTime, environment_1.environment.dateTimeFormat).format(environment_1.environment.dateTimeFormat);
                     res.status(200).json(event);
                     return [3 /*break*/, 4];
                 case 3:

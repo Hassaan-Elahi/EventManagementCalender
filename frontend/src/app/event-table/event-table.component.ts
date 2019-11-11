@@ -82,8 +82,8 @@ export class EventTableComponent implements OnInit {
             type: 'view',
             id: event['id'],
             name: event['name'],
-            startTime: moment.utc(event['startTime']).local().format(environment.dateTimeFormat),
-            endTime: moment.utc(event['endTime']).local().format(environment.dateTimeFormat),
+            startTime: moment.utc(event['startTime']).utcOffset(5).format(environment.dateTimeFormat),
+            endTime: moment.utc(event['endTime']).utcOffset(5).format(environment.dateTimeFormat),
             description: event['description'],
 
           }

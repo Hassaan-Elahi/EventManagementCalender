@@ -56,7 +56,7 @@ export class EventCreationModalComponent implements OnInit {
   IsEventValid(data: { name: string; description: string; startTime: any; endTime: any }) {
     
     const mStartTime = moment(this.startTime, environment.dateTimeFormat);
-    const mEndTime = moment(this.endTime, environment.dateTimeFormat)
+    const mEndTime = moment(this.endTime, environment.dateTimeFormat);
     if (data.name === '' || data.name === null) {
       
       this.tostr.error("Please provide Name for the Event");
