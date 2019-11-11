@@ -29,7 +29,7 @@ export class LoginComponent implements OnInit {
 		this.loginService.login(data)
 			.then( data => 
 			{
-				localStorage.setItem('currentUser',data['user']);
+				localStorage.setItem('currentUser',JSON.stringify(data['user']));
 				this.router.navigate(['home']);
 			
 			})

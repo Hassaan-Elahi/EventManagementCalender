@@ -21,6 +21,8 @@ import { EventTableComponent } from './event-table/event-table.component';
 import { CookieService } from "ngx-cookie-service";
 import { headerInterceptor } from "./header-interceptor";
 import { SideBarComponent } from './side-bar/side-bar.component';
+import { ProfileComponent } from './profile/profile.component';
+import { EventComponent } from './event/event.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +34,8 @@ import { SideBarComponent } from './side-bar/side-bar.component';
     ViewEventModalComponent,
     EventTableComponent,
     SideBarComponent,
+    ProfileComponent,
+    EventComponent,
   ],
   imports: [
     BrowserModule,

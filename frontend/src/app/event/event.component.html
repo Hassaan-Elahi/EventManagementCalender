@@ -1,0 +1,15 @@
+
+<div class="mt-5">
+    <div class="row">
+        <div class="col-md-4">
+            <app-monthpicker (change)="onDateChange($event) "></app-monthpicker>
+        </div>
+        <div class="col-md-4">
+            <app-event-table [monthIndex]="monthIndex" [year]="year"></app-event-table>
+        </div>
+        <div class="col-md-8">
+            <button (click)="openModal()" type="button" class="btn btn-info">Create Event</button>
+        </div>
+    </div>
+</div>
+

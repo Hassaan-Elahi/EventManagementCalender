@@ -1,8 +1,10 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import {buildServePath} from '@angular-devkit/build-angular/src/dev-server';
 import {LoginComponent} from './login/login.component';
 import {HomeComponent} from "./home/home.component";
+import {ProfileComponent} from "./profile/profile.component";
+import {pathToFileURL} from "url";
+import {EventComponent} from "./event/event.component";
 
 
 const routes: Routes = [
@@ -12,8 +14,21 @@ const routes: Routes = [
   },
   {
     path: 'home',
-    component: HomeComponent
-  }
+    component: HomeComponent,
+    children: [
+      {
+        path: 'profile',
+        component: ProfileComponent
+      },
+      {
+        path: 'event',
+        component: EventComponent
+    
+      }      
+    ]
+  },
+  
+    
 ];
 
 
