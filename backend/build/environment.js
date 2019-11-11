@@ -4,7 +4,7 @@
 // The list of file replacements can be found in `angular.json`.
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.environment = {
-    dateTimeFormat: 'YYYY-MM-DDThh:mm',
+    dateTimeFormat: 'YYYY-MM-DDTHH:mm',
     JWT_SECRET: "gtwsWhEm8Q2HrMUAX",
     JWT_DEFAULT_EXPIRY: 400
 };

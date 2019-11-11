@@ -130,9 +130,27 @@ function getEvent(req, res) {
     });
 }
 exports.getEvent = getEvent;
+function hasClash(allEvents, currentEvent) {
+    /*
+    returns null for no clash
+    returns clashed event for clash
+    */
+    var startTime = moment.utc(currentEvent.startTime, environment_1.environment.dateTimeFormat);
+    var endTime = moment.utc(currentEvent.endTime, environment_1.environment.dateTimeFormat);
+    for (var _i = 0, allEvents_1 = allEvents; _i < allEvents_1.length; _i++) {
+        var e = allEvents_1[_i];
+        var eStartTime = moment.utc(e.startTime, environment_1.environment.dateTimeFormat);
+        var eEndTime = moment.utc(e.endTime, environment_1.environment.dateTimeFormat);
+        // for clash condition
+        if (!(endTime <= eStartTime || startTime >= eEndTime)) {
+            return e;
+        }
+    }
+    return null;
+}
 function createEvent(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var name, startTime, endTime, description, eventRepo, event, _a, e_3;
+        var name, startTime, endTime, description, eventRepo, allEvents, event, _a, clashEvent, e_3;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
@@ -141,6 +159,9 @@ function createEvent(req, res) {
                     endTime = req.body.endTime;
                     description = req.body.description;
                     eventRepo = typeorm_1.getRepository(event_1.Event);
+                    return [4 /*yield*/, eventRepo.find()];
+                case 1:
+                    allEvents = _b.sent();
                     event = new event_1.Event();
                     event.name = name;
                     event.startTime = startTime;
@@ -148,21 +169,27 @@ function createEvent(req, res) {
                     event.description = description;
                     _a = event;
                     return [4 /*yield*/, typeorm_1.getRepository(user_1.User).findOneOrFail(1)];
-                case 1:
-                    _a.user = _b.sent(); //must be changed here
-                    _b.label = 2;
                 case 2:
-                    _b.trys.push([2, 4, , 5]);
-                    return [4 /*yield*/, eventRepo.save(event)];
+                    _a.user = _b.sent(); //must be changed here
+                    clashEvent = hasClash(allEvents, event);
+                    if (!!clashEvent) return [3 /*break*/, 7];
+                    _b.label = 3;
                 case 3:
+                    _b.trys.push([3, 5, , 6]);
+                    return [4 /*yield*/, eventRepo.save(event)];
+                case 4:
                     _b.sent();
                     res.status(200).json({ message: "Event Saved Successfully" });
-                    return [3 /*break*/, 5];
-                case 4:
+                    return [3 /*break*/, 6];
+                case 5:
                     e_3 = _b.sent();
-                    res.status(500).json({ message: e_3 });
-                    return [3 /*break*/, 5];
-                case 5: return [2 /*return*/];
+                    res.status(400).json({ message: e_3 });
+                    return [3 /*break*/, 6];
+                case 6: return [3 /*break*/, 8];
+                case 7:
+                    res.status(400).json({ message: "Event could not be created due to clash with event " + clashEvent.name + " \n\t\twhich has startTime: " + clashEvent.startTime + " and endTime: " + clashEvent.endTime });
+                    _b.label = 8;
+                case 8: return [2 /*return*/];
             }
         });
     });

@@ -102,8 +102,8 @@ export class EventCreationModalComponent implements OnInit {
           })
           .catch(err => {
         
-            this.tostr.error(err.message);
-            this.modalRef.hide();
+            this.tostr.error(err.error.message);
+            
           })
     }
   }
