@@ -50,9 +50,9 @@ export class EventTableComponent implements OnInit {
   
   
   ngOnChanges() {
-    console.debug("ng changes")
     this.ReloadData()
   }
+  
   
   renderCell(item) {
     
@@ -66,10 +66,15 @@ export class EventTableComponent implements OnInit {
   }
   
   
+  
+  onCellMouseOver() {
+    
+    
+  }
+  
   onCellClicked(event) {
     
-    console.log(event);
-    // date on which click
+    // date on which clicked
     if (event.value.event) {
       
       this.eventService.getEvent(event.value.event).then(event => {
@@ -127,20 +132,26 @@ export class EventTableComponent implements OnInit {
   
   
   
-  // this function will get date and return if this date has an event or not
+  // this function will get date and return if this date has an event or list of events or not
   // and will use this.events
   //
   checkEvent(date) {
     
+    const events = []; 
     for ( let i of this.events.data ) {
       
       let startDate = moment.utc(i.startTime).local().date();
       
       if (date === startDate ) {
-        return i.id;
+        events.push(i.id);
+        
       }
     }
-    return null;
+    if (events.length === 0) {
+      return null;
+    } else {
+      return events;
+    }
     
   }
   
