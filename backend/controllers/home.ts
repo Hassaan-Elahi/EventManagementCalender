@@ -38,8 +38,8 @@ export async function getAllEvents(req: Request, res: Response) {
 		
 		const newEvents = [];
 		for (let e of events) {
-			const startTime = moment.utc(e.startTime, environment.dateTimeFormat);
-			const endTime = moment.utc(e.endTime, environment.dateTimeFormat);
+			const startTime = moment.utc(e.start_time, environment.dateTimeFormat);
+			const endTime = moment.utc(e.end_time, environment.dateTimeFormat);
 			if (startTime.get('month') == date.get('month') && startTime.get('year') == date.get('year')) {
 				newEvents.push(e);
 			}
@@ -81,12 +81,12 @@ function hasClash(allEvents: Event[], currentEvent: Event): any {
 		returns clashed event for clash 
 		*/
 		
-		const startTime = moment.utc(currentEvent.startTime, environment.dateTimeFormat);
-		const endTime = moment.utc(currentEvent.endTime, environment.dateTimeFormat);
+		const startTime = moment.utc(currentEvent.start_time, environment.dateTimeFormat);
+		const endTime = moment.utc(currentEvent.end_time, environment.dateTimeFormat);
 		
 		for (let e of allEvents) {
-			const eStartTime = moment.utc(e.startTime, environment.dateTimeFormat);
-			const eEndTime = moment.utc(e.endTime, environment.dateTimeFormat);
+			const eStartTime = moment.utc(e.start_time, environment.dateTimeFormat);
+			const eEndTime = moment.utc(e.end_time, environment.dateTimeFormat);
 			
 			// for clash condition
 			if (!(endTime <= eStartTime || startTime >= eEndTime) ) {
@@ -114,8 +114,8 @@ export async function createEvent(req: Request, res: Response) {
 	 
 	const event = new Event();
 	event.name = name;
-	event.startTime = startTime;
-	event.endTime = endTime;
+	event.start_time = startTime;
+	event.end_time = endTime;
 	event.description = description;
 	event.user = await getRepository(User).findOneOrFail(res.locals.currentUserId); //must be changed here
 
@@ -146,8 +146,8 @@ export async function updateEvent(req: Request, res: Response) {
 	const event = await eventRepo.findOneOrFail({where: {id: id, user: res.locals.currentUserId}});
 	
 	event.name = name;
-	event.startTime = startTime;
-	event.endTime = endTime;
+	event.start_time = startTime;
+	event.end_time = endTime;
 	event.description = description;
 	event.user = await getRepository(User).findOneOrFail(res.locals.currentUserId); //must be changed here
 	

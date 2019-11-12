@@ -11,10 +11,9 @@ export class Event {
 	name: string;
 	
 	@Column()
-	startTime: string;
-	
+	start_time: Date;
 	@Column()
-	endTime: string;
+	end_time: Date;
 	
 	@Column()
 	description: string;

@@ -24,12 +24,12 @@ var Event = /** @class */ (function () {
     ], Event.prototype, "name", void 0);
     __decorate([
         typeorm_1.Column(),
-        __metadata("design:type", String)
-    ], Event.prototype, "startTime", void 0);
+        __metadata("design:type", Date)
+    ], Event.prototype, "start_time", void 0);
     __decorate([
         typeorm_1.Column(),
-        __metadata("design:type", String)
-    ], Event.prototype, "endTime", void 0);
+        __metadata("design:type", Date)
+    ], Event.prototype, "end_time", void 0);
     __decorate([
         typeorm_1.Column(),
         __metadata("design:type", String)

@@ -86,8 +86,8 @@ function getAllEvents(req, res) {
                     newEvents = [];
                     for (_i = 0, events_1 = events; _i < events_1.length; _i++) {
                         e = events_1[_i];
-                        startTime = moment.utc(e.startTime, environment_1.environment.dateTimeFormat);
-                        endTime = moment.utc(e.endTime, environment_1.environment.dateTimeFormat);
+                        startTime = moment.utc(e.start_time, environment_1.environment.dateTimeFormat);
+                        endTime = moment.utc(e.end_time, environment_1.environment.dateTimeFormat);
                         if (startTime.get('month') == date.get('month') && startTime.get('year') == date.get('year')) {
                             newEvents.push(e);
                         }
@@ -135,12 +135,12 @@ function hasClash(allEvents, currentEvent) {
     returns null for no clash
     returns clashed event for clash
     */
-    var startTime = moment.utc(currentEvent.startTime, environment_1.environment.dateTimeFormat);
-    var endTime = moment.utc(currentEvent.endTime, environment_1.environment.dateTimeFormat);
+    var startTime = moment.utc(currentEvent.start_time, environment_1.environment.dateTimeFormat);
+    var endTime = moment.utc(currentEvent.end_time, environment_1.environment.dateTimeFormat);
     for (var _i = 0, allEvents_1 = allEvents; _i < allEvents_1.length; _i++) {
         var e = allEvents_1[_i];
-        var eStartTime = moment.utc(e.startTime, environment_1.environment.dateTimeFormat);
-        var eEndTime = moment.utc(e.endTime, environment_1.environment.dateTimeFormat);
+        var eStartTime = moment.utc(e.start_time, environment_1.environment.dateTimeFormat);
+        var eEndTime = moment.utc(e.end_time, environment_1.environment.dateTimeFormat);
         // for clash condition
         if (!(endTime <= eStartTime || startTime >= eEndTime)) {
             return e;
@@ -164,8 +164,8 @@ function createEvent(req, res) {
                     allEvents = _b.sent();
                     event = new event_1.Event();
                     event.name = name;
-                    event.startTime = startTime;
-                    event.endTime = endTime;
+                    event.start_time = startTime;
+                    event.end_time = endTime;
                     event.description = description;
                     _a = event;
                     return [4 /*yield*/, typeorm_1.getRepository(user_1.User).findOneOrFail(res.locals.currentUserId)];
@@ -211,8 +211,8 @@ function updateEvent(req, res) {
                 case 1:
                     event = _b.sent();
                     event.name = name;
-                    event.startTime = startTime;
-                    event.endTime = endTime;
+                    event.start_time = startTime;
+                    event.end_time = endTime;
                     event.description = description;
                     _a = event;
                     return [4 /*yield*/, typeorm_1.getRepository(user_1.User).findOneOrFail(res.locals.currentUserId)];

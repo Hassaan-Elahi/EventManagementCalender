@@ -6,7 +6,6 @@ import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import {EventService} from "../services/event.service";
 import {ToastrService} from "ngx-toastr";
 import * as moment from 'moment'
-import {ViewEventModalComponent} from "../view-event-modal/view-event-modal.component";
 import {initialState} from "ngx-bootstrap/timepicker/reducer/timepicker.reducer";
 import {environment} from "../../environments/environment";
 import {EventTableComponent} from "../event-table/event-table.component";
