@@ -1,6 +1,5 @@
 import {Entity, PrimaryGeneratedColumn, Column, ManyToOne} from "typeorm";
 import {User} from "./user";
-import {Runtime} from "inspector";
 
 @Entity()
 export class Event {
@@ -23,10 +22,5 @@ export class Event {
 	
 	@ManyToOne(type => User, user => user.events)
 	user: User;
-	
-	
-	
-	
-	
 	
 }

@@ -5,6 +5,7 @@ import {ToastrService} from "ngx-toastr";
 import {EventCreationModalComponent} from "../event-creation-modal/event-creation-modal.component";
 import * as moment from "moment";
 import {environment} from "../../environments/environment";
+import {EventListViewModalComponent} from "../event-list-view-modal/event-list-view-modal.component";
 
 @Component({
   selector: 'app-event-table',
@@ -20,6 +21,7 @@ export class EventTableComponent implements OnInit {
   public rowData: any;
   public events: any;
   eventModal: BsModalRef;
+  eventListModal: BsModalRef;
   
   
   
@@ -67,12 +69,16 @@ export class EventTableComponent implements OnInit {
   
   
   
-  onCellMouseOver() {
-    
-    
+  onCellClicked(event) {
+    this.eventListModal = this.modalService.show(EventListViewModalComponent, {
+      initialState: {
+        eventList: this.events.data
+      }
+  
+    })
   }
   
-  onCellClicked(event) {
+  oonCellClicked(event) {
     
     // date on which clicked
     if (event.value.event) {
@@ -143,7 +149,7 @@ export class EventTableComponent implements OnInit {
       let startDate = moment.utc(i.startTime).local().date();
       
       if (date === startDate ) {
-        events.push(i.id);
+        events.push({id: i.id, name: i.name});
         
       }
     }

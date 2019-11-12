@@ -16,13 +16,15 @@ import { EventCreationModalComponent } from './event-creation-modal/event-creati
 import { ModalModule } from 'ngx-bootstrap';
 import {ToastrService} from "ngx-toastr";
 import {ToastrModule} from "ngx-toastr";
-import { ViewEventModalComponent } from './view-event-modal/view-event-modal.component';
 import { EventTableComponent } from './event-table/event-table.component';
 import { CookieService } from "ngx-cookie-service";
 import { headerInterceptor } from "./header-interceptor";
 import { SideBarComponent } from './side-bar/side-bar.component';
 import { ProfileComponent } from './profile/profile.component';
 import { EventComponent } from './event/event.component';
+import { ButtonsModule } from '@progress/kendo-angular-buttons';
+import { EventListViewModalComponent } from './event-list-view-modal/event-list-view-modal.component';
+
 
 @NgModule({
   declarations: [
@@ -31,11 +33,11 @@ import { EventComponent } from './event/event.component';
     HomeComponent,
     MonthpickerComponent,
     EventCreationModalComponent,
-    ViewEventModalComponent,
     EventTableComponent,
     SideBarComponent,
     ProfileComponent,
     EventComponent,
+    EventListViewModalComponent,
   ],
   imports: [
     BrowserModule,
@@ -48,6 +50,7 @@ import { EventComponent } from './event/event.component';
     IgxCalendarModule,
     ModalModule.forRoot(),
     BrowserAnimationsModule,
+    ButtonsModule,
       
   ],
   providers: [
@@ -63,7 +66,7 @@ import { EventComponent } from './event/event.component';
       
   ],
   bootstrap: [AppComponent],
-  entryComponents: [EventCreationModalComponent, ViewEventModalComponent]
+  entryComponents: [EventCreationModalComponent, EventListViewModalComponent]
 })
 export class AppModule {
 }
