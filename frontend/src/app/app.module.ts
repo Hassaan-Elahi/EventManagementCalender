@@ -23,7 +23,7 @@ import { SideBarComponent } from './side-bar/side-bar.component';
 import { ProfileComponent } from './profile/profile.component';
 import { EventComponent } from './event/event.component';
 import { ButtonsModule } from '@progress/kendo-angular-buttons';
-import { EventListViewModalComponent } from './event-list-view-modal/event-list-view-modal.component';
+
 
 
 @NgModule({
@@ -37,7 +37,6 @@ import { EventListViewModalComponent } from './event-list-view-modal/event-list-
     SideBarComponent,
     ProfileComponent,
     EventComponent,
-    EventListViewModalComponent,
   ],
   imports: [
     BrowserModule,
@@ -66,7 +65,7 @@ import { EventListViewModalComponent } from './event-list-view-modal/event-list-
       
   ],
   bootstrap: [AppComponent],
-  entryComponents: [EventCreationModalComponent, EventListViewModalComponent]
+  entryComponents: [EventCreationModalComponent]
 })
 export class AppModule {
 }

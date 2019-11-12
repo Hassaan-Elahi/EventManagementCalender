@@ -5,7 +5,6 @@ import {ToastrService} from "ngx-toastr";
 import {EventCreationModalComponent} from "../event-creation-modal/event-creation-modal.component";
 import * as moment from "moment";
 import {environment} from "../../environments/environment";
-import {EventListViewModalComponent} from "../event-list-view-modal/event-list-view-modal.component";
 
 @Component({
   selector: 'app-event-table',
@@ -70,15 +69,6 @@ export class EventTableComponent implements OnInit {
   
   
   onCellClicked(event) {
-    this.eventListModal = this.modalService.show(EventListViewModalComponent, {
-      initialState: {
-        eventList: this.events.data
-      }
-  
-    })
-  }
-  
-  oonCellClicked(event) {
     
     // date on which clicked
     if (event.value.event) {

@@ -1,9 +1,0 @@
-<div class="modal-body">
-    <div>
-        <ul>
-            <div *ngFor="let e of eventList">
-                <a href="#" #eventLink (click)="onItemClicked($event, eventLink)" [attr.data-id]="e.id" class="font-wight-bold">{{e.name}}</a>
-            </div>
-        </ul>
-    </div>
-</div>
