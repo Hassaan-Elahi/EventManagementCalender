@@ -34,7 +34,7 @@ export async function getAllEvents(req: Request, res: Response) {
 	
 	try {
 		// getting all events
-		const events = await eventRepo.find();
+		const events = await eventRepo.find({where: { user: res.locals.currentUserId} });
 		
 		const newEvents = [];
 		for (let e of events) {
@@ -62,7 +62,7 @@ export async function getEvent(req: Request, res: Response) {
 	
 	try {
 	
-		event = await eventRepo.findOneOrFail(parseInt(req.params.id));
+		event = await eventRepo.findOneOrFail( {where: {id:parseInt(req.params.id) , userId: res.locals.currentUserId} });
 		res.status(200).json(event);
 		
 	} catch(err) {
@@ -106,7 +106,7 @@ export async function createEvent(req: Request, res: Response) {
 	const description = req.body.description;
 	const eventRepo = getRepository(Event);
 	
-	const allEvents = await eventRepo.find();
+	const allEvents = await eventRepo.find({where: {user: res.locals.currentUserId}});
 	
 	//could be optimized here
 	
@@ -117,7 +117,7 @@ export async function createEvent(req: Request, res: Response) {
 	event.startTime = startTime;
 	event.endTime = endTime;
 	event.description = description;
-	event.user = await getRepository(User).findOneOrFail(1); //must be changed here
+	event.user = await getRepository(User).findOneOrFail(res.locals.currentUserId); //must be changed here
 
 	const clashEvent = hasClash(allEvents, event);
 	if(!clashEvent) {
@@ -143,13 +143,13 @@ export async function updateEvent(req: Request, res: Response) {
 	const endTime = req.body.endTime;
 	const description = req.body.description;
 	const eventRepo = getRepository(Event);
-	const event = await eventRepo.findOneOrFail(id);
+	const event = await eventRepo.findOneOrFail({where: {id: id, user: res.locals.currentUserId}});
 	
 	event.name = name;
 	event.startTime = startTime;
 	event.endTime = endTime;
 	event.description = description;
-	event.user = await getRepository(User).findOneOrFail(1); //must be changed here
+	event.user = await getRepository(User).findOneOrFail(res.locals.currentUserId); //must be changed here
 	
 	
 	try {

@@ -50,7 +50,7 @@ exports.checkJwt = function () {
             // Try to validate the token and get data
             try {
                 jwtPayload = jwt.verify(token, environment_1.environment.JWT_SECRET);
-                res.locals.currentUserId = jwtPayload.userId;
+                res.locals.currentUserId = jwtPayload;
             }
             catch (exception) {
                 // If token is not valid, respond with 401 (unauthorized)

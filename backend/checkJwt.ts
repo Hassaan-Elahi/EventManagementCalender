@@ -21,7 +21,7 @@ export const checkJwt = () => {
         try {
         
             jwtPayload = jwt.verify(token, environment.JWT_SECRET) as any;
-            res.locals.currentUserId = jwtPayload.userId;
+            res.locals.currentUserId = jwtPayload;
         
         } catch (exception) {
             // If token is not valid, respond with 401 (unauthorized)

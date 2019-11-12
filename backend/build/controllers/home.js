@@ -80,7 +80,7 @@ function getAllEvents(req, res) {
                     _a.label = 1;
                 case 1:
                     _a.trys.push([1, 3, , 4]);
-                    return [4 /*yield*/, eventRepo.find()];
+                    return [4 /*yield*/, eventRepo.find({ where: { user: res.locals.currentUserId } })];
                 case 2:
                     events = _a.sent();
                     newEvents = [];
@@ -114,7 +114,7 @@ function getEvent(req, res) {
                     _a.label = 1;
                 case 1:
                     _a.trys.push([1, 3, , 4]);
-                    return [4 /*yield*/, eventRepo.findOneOrFail(parseInt(req.params.id))];
+                    return [4 /*yield*/, eventRepo.findOneOrFail({ where: { id: parseInt(req.params.id), userId: res.locals.currentUserId } })];
                 case 2:
                     event = _a.sent();
                     res.status(200).json(event);
@@ -159,7 +159,7 @@ function createEvent(req, res) {
                     endTime = req.body.endTime;
                     description = req.body.description;
                     eventRepo = typeorm_1.getRepository(event_1.Event);
-                    return [4 /*yield*/, eventRepo.find()];
+                    return [4 /*yield*/, eventRepo.find({ where: { user: res.locals.currentUserId } })];
                 case 1:
                     allEvents = _b.sent();
                     event = new event_1.Event();
@@ -168,7 +168,7 @@ function createEvent(req, res) {
                     event.endTime = endTime;
                     event.description = description;
                     _a = event;
-                    return [4 /*yield*/, typeorm_1.getRepository(user_1.User).findOneOrFail(1)];
+                    return [4 /*yield*/, typeorm_1.getRepository(user_1.User).findOneOrFail(res.locals.currentUserId)];
                 case 2:
                     _a.user = _b.sent(); //must be changed here
                     clashEvent = hasClash(allEvents, event);
@@ -207,7 +207,7 @@ function updateEvent(req, res) {
                     endTime = req.body.endTime;
                     description = req.body.description;
                     eventRepo = typeorm_1.getRepository(event_1.Event);
-                    return [4 /*yield*/, eventRepo.findOneOrFail(id)];
+                    return [4 /*yield*/, eventRepo.findOneOrFail({ where: { id: id, user: res.locals.currentUserId } })];
                 case 1:
                     event = _b.sent();
                     event.name = name;
@@ -215,7 +215,7 @@ function updateEvent(req, res) {
                     event.endTime = endTime;
                     event.description = description;
                     _a = event;
-                    return [4 /*yield*/, typeorm_1.getRepository(user_1.User).findOneOrFail(1)];
+                    return [4 /*yield*/, typeorm_1.getRepository(user_1.User).findOneOrFail(res.locals.currentUserId)];
                 case 2:
                     _a.user = _b.sent(); //must be changed here
                     _b.label = 3;
