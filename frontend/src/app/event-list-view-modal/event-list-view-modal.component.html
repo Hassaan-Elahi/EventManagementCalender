@@ -2,8 +2,7 @@
     <div>
         <ul>
             <div *ngFor="let e of eventList">
-                <li>{{e.name}}</li>
-
+                <a href="#" #eventLink (click)="onItemClicked($event, eventLink)" [attr.data-id]="e.id" class="font-wight-bold">{{e.name}}</a>
             </div>
         </ul>
     </div>
