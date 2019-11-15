@@ -2,7 +2,7 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {BsModalRef, BsModalService} from "ngx-bootstrap";
 import {EventService} from "../services/event.service";
 import {ToastrService} from "ngx-toastr";
-import {EventCreationModalComponent} from "../event-creation-modal/event-creation-modal.component";
+import {EventCreationModalComponent} from "../modals/event-creation-modal/event-creation-modal.component";
 import {EventTableComponent} from "../event-table/event-table.component";
 
 @Component({
@@ -18,6 +18,7 @@ export class EventComponent implements OnInit {
   public eventModal: BsModalRef;
   public monthIndex: number;
   public year: number;
+  public events: any;
 
   
   constructor(private modalService: BsModalService, private eventService: EventService,
@@ -48,5 +49,14 @@ export class EventComponent implements OnInit {
     // and on ngOnChanges() in eventTableComponent will reload the data of events
     this.monthIndex = event.monthIndex;
     this.year = event.year
+  }
+  
+  // got new events on a particular date from eventTable now want to display
+  // this on eventDetailTable so giving input
+  //this.events is bind to event-detail-table
+  onEventsChanged(changeEvent) {
+    console.log("in onEventsChanged");
+    this.events = changeEvent.event
+    
   }
 }

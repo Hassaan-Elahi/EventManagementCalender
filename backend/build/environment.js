@@ -6,7 +6,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.environment = {
     dateTimeFormat: 'YYYY-MM-DDTHH:mm',
     JWT_SECRET: "gtwsWhEm8Q2HrMUAX",
-    JWT_DEFAULT_EXPIRY: 400
+    JWT_DEFAULT_EXPIRY: 400,
+    dateTimePrettyFormat: 'ddd, DD MMM YYYY  HH:mm '
 };
 /*
  * For easier debugging in development mode, you can import the following file

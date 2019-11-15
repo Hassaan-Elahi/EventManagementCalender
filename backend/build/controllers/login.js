@@ -68,4 +68,39 @@ function login(req, res) {
     });
 }
 exports.login = login;
+function resetPassword(req, res) {
+    return __awaiter(this, void 0, void 0, function () {
+        var userRepo, user, e_1;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    userRepo = typeorm_1.getRepository(user_1.User);
+                    user = null;
+                    _a.label = 1;
+                case 1:
+                    _a.trys.push([1, 3, , 4]);
+                    return [4 /*yield*/, userRepo.findOneOrFail(res.locals.currentUserId)];
+                case 2:
+                    user = _a.sent();
+                    return [3 /*break*/, 4];
+                case 3:
+                    e_1 = _a.sent();
+                    res.status(404).json({ message: e_1.message });
+                    return [3 /*break*/, 4];
+                case 4:
+                    user.password = req.body.password;
+                    return [4 /*yield*/, userRepo.save(user)];
+                case 5:
+                    _a.sent();
+                    // // sending new token -- ASK
+                    // const newToken = jwt.sign(res.locals.currentUserId, environment.JWT_SECRET);
+                    // res.cookie("token", newToken, { httpOnly:true });
+                    //
+                    res.status(200).json({});
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.resetPassword = resetPassword;
 //# sourceMappingURL=login.js.map

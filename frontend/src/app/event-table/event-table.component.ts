@@ -1,8 +1,8 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {BsModalRef, BsModalService} from "ngx-bootstrap";
 import {EventService} from "../services/event.service";
 import {ToastrService} from "ngx-toastr";
-import {EventCreationModalComponent} from "../event-creation-modal/event-creation-modal.component";
+import {EventCreationModalComponent} from "../modals/event-creation-modal/event-creation-modal.component";
 import * as moment from "moment";
 import {environment} from "../../environments/environment";
 
@@ -14,7 +14,7 @@ import {environment} from "../../environments/environment";
 export class EventTableComponent implements OnInit {
   
   
-  
+  @Output() onEventsChanged = new EventEmitter();
   @Input()  monthIndex: number;
   @Input() year: number;
   public rowData: any;
@@ -46,7 +46,6 @@ export class EventTableComponent implements OnInit {
   
   
   ngOnInit() {
-    this.ReloadData()
   }
   
   
@@ -70,48 +69,11 @@ export class EventTableComponent implements OnInit {
   
   onCellClicked(event) {
     
-    // date on which clicked
-    if (event.value.event) {
-      
-      this.eventService.getEvent(event.value.event).then(event => {
-  
-  
-        const sTime = moment.utc(event['startTime']);
+        if (event.value.length === 0) {
+          this.toastr.info("No Events on this date");
+        }
+        this.onEventsChanged.emit(event.value);
         
-        this.eventModal = this.modalService.show(EventCreationModalComponent, {
-          initialState: {
-            type: 'view',
-            id: event['id'],
-            name: event['name'],
-            startTime: moment.utc(event['startTime']).utcOffset(5).format(environment.dateTimeFormat),
-            endTime: moment.utc(event['endTime']).utcOffset(5).format(environment.dateTimeFormat),
-            description: event['description'],
-
-          }
-        });
-        const modal = this.modalService.onHide.subscribe( result => {
-          this.ReloadData();
-          modal.unsubscribe();
-        });
-        
-      }).catch(err => {
-        
-        this.toastr.error(err.message)
-      });
-      
-    } else {
-      this.toastr.info("No Event on this date")
-    }
-    
-    
-    // this.eventService.getEvent(data).then( data => {
-    //  
-    //   this.eventModal = this.modalService.show(ViewEventModalComponent)
-    //  
-    // }).catch(err => {
-    //   console.log(err);
-    //
-    // });
   }
   
    public ReloadData() {
@@ -134,13 +96,16 @@ export class EventTableComponent implements OnInit {
   checkEvent(date) {
     
     const events = []; 
-    for ( let i of this.events.data ) {
+    console.log(this.events.events);
+    for ( let i of this.events.events ) {
       
-      let startDate = moment.utc(i.startTime).local().date();
+      let startDate = moment(i.startTime).date();
+      let endDate = moment(i.endTime).date();
       
-      if (date === startDate ) {
-        events.push({id: i.id, name: i.name});
-        
+      // if date is inbetween end date or start Date
+      // we want to show all days in which the event occur
+      if (startDate <= date && date <= endDate  ) {
+        events.push(i);
       }
     }
     if (events.length === 0) {
@@ -173,7 +138,7 @@ export class EventTableComponent implements OnInit {
         {
           if (d < day)
           {
-            weekobj[d.toString()] = { date: '', event: false }
+            weekobj[d.toString()] = { date: '', event: [] }
           }
           else
           {
@@ -185,7 +150,7 @@ export class EventTableComponent implements OnInit {
         {
           if (d > lastDay)
           {
-            weekobj[d.toString()] = { date: '', event: false }
+            weekobj[d.toString()] = { date: '', event: [] }
           }
           else
           {

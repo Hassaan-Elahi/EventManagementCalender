@@ -5,6 +5,8 @@ import {HomeComponent} from "./home/home.component";
 import {ProfileComponent} from "./profile/profile.component";
 import {pathToFileURL} from "url";
 import {EventComponent} from "./event/event.component";
+import {ResetPasswordComponent} from "./reset-password/reset-password.component";
+import {SharedEventComponent} from "./shared-event/shared-event.component";
 
 
 const routes: Routes = [
@@ -23,6 +25,16 @@ const routes: Routes = [
       {
         path: 'event',
         component: EventComponent
+    
+      },
+      {
+        path: 'reset',
+        component: ResetPasswordComponent
+    
+      },      
+      {
+        path: 'shared',
+        component: SharedEventComponent
     
       }      
     ]

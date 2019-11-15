@@ -51,7 +51,7 @@ typeorm_1.createConnection()
         // simple middle ware to handle cross-origin requests
         app.use(function (req, res, next) {
             res.header("Access-Control-Allow-Origin", "http://localhost:4200");
-            res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+            res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, X-Auth-Token, Authorization, Content-Type, Accept");
             res.header("Access-Control-Allow-credentials", true);
             res.header("Access-Control-Allow-Methods", "PATCH, OPTIONS, GET, PUT, POST, DELETE, HEAD");
             next();

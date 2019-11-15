@@ -1,0 +1,25 @@
+<div class="modal-body">
+
+    <div class="form-group">
+        <label class="col-form-label font-weight-bold ">Event Name</label>
+        <label class="form-control">{{name}}</label>
+    </div>
+    <div class="form-group">
+
+        <label class="col-form-label font-weight-bold ">Event Start Time</label>
+        <label class="form-control">{{startTime}}</label>
+    </div>
+    <div class="form-group">
+        <label class="col-form-label font-weight-bold ">Event End Time</label>
+        <label class="form-control">{{endTime}}</label>
+    </div>
+    <div class="form-group">
+        <label class="col-form-label font-weight-bold ">Description</label>
+        <label class="form-control">{{description}}</label>
+    </div>
+
+</div>
+<div class="modal-footer">
+    <button (click)="modalRef.hide();" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+    
+</div>

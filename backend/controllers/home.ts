@@ -4,7 +4,7 @@ import {User} from "../entity/user";
 import {Event} from "../entity/event";
 import * as moment from 'moment'
 import {environment} from "../environment";
-
+import {MoreThanOrEqual, LessThanOrEqual, MoreThan, LessThan, Raw, Brackets} from "typeorm";
 
 
 export async function deleteEvent(req: Request, res: Response) {
@@ -25,27 +25,32 @@ export async function deleteEvent(req: Request, res: Response) {
 	
 }
 
-export async function getAllEvents(req: Request, res: Response) {
+export async function getAllEventsMinimal(req: Request, res: Response) {
 	
-	const month = req.query.month;
-	const year = req.query.year;
-	const date = moment(new Date(year, month));
+	
+	const date = new Date(req.query.year, req.query.month);
 	const eventRepo = getRepository(Event);
+	const month = date.getMonth() + 1;
+	const year = date.getFullYear();
 	
 	try {
-		// getting all events
-		const events = await eventRepo.find({where: { user: res.locals.currentUserId} });
+		const events = await eventRepo.createQueryBuilder('event')
+			.where("event.user = :id", {id: res.locals.currentUserId})
+			.andWhere(new Brackets( q => 
+			{
+					q.where("date_part('month', event.start_time) = :givenMonth", {givenMonth: month });
+					q.orWhere("date_part('year', event.start_time) = :givenYear", {givenYear: year});
+			}))
+			.andWhere(new Brackets( q =>
+			{
+				q.where("date_part('month', event.end_time) = :givenMonth", {givenMonth: month });
+				q.orWhere("date_part('year', event.end_time) = :givenYear", {givenYear: year});
+			}))
+			.getMany();
+			
+		console.log(events);
+		res.status(200).json({events})
 		
-		const newEvents = [];
-		for (let e of events) {
-			const startTime = moment.utc(e.start_time, environment.dateTimeFormat);
-			const endTime = moment.utc(e.end_time, environment.dateTimeFormat);
-			if (startTime.get('month') == date.get('month') && startTime.get('year') == date.get('year')) {
-				newEvents.push(e);
-			}
-		}
-		
-		res.status(200).json({data : events})
 	}
 	catch (e) {
 		res.status(500).json({message: e})
@@ -54,22 +59,31 @@ export async function getAllEvents(req: Request, res: Response) {
 	
 }
 
-export async function getEvent(req: Request, res: Response) {
+export async function getEvents(req: Request, res: Response) {
 	
 	let event;
+	const month = req.params.month;
+	const year = req.params.year;
+	const date = req.params.date;
+	const givenDate = new Date(year,month, date);
+	
 	
 	const eventRepo = getRepository(Event);
 	
+
 	try {
-	
-		event = await eventRepo.findOneOrFail( {where: {id:parseInt(req.params.id) , userId: res.locals.currentUserId} });
+
+		event = await eventRepo.find( {
+			where: {userId: res.locals.currentUserId, start_time: MoreThanOrEqual(givenDate), end_time: LessThanOrEqual(givenDate)},
+					});
+
 		res.status(200).json(event);
-		
+
 	} catch(err) {
-	
+
 		console.log(err);   
 		res.status(500).json({message: err.message})
-		
+
 	}
 	
 	
@@ -110,8 +124,6 @@ export async function createEvent(req: Request, res: Response) {
 	
 	//could be optimized here
 	
-		
-	 
 	const event = new Event();
 	event.name = name;
 	event.start_time = startTime;
@@ -131,10 +143,38 @@ export async function createEvent(req: Request, res: Response) {
 	}
 	else {
 		res.status(400).json({message: `Event could not be created due to clash with event ${clashEvent.name} 
-		which has startTime: ${clashEvent.startTime} and endTime: ${clashEvent.endTime}`})
+		which has startTime: ${moment(clashEvent.startTime).format(environment.dateTimePrettyFormat)} and endTime: ${moment(clashEvent.startTime).format(environment.dateTimePrettyFormat)}`})
 	}
 }
+
+
+
+
+export async function getEventsByEmail(req: Request, res: Response) {
 	
+	const email = req.query.email;
+	
+	try {
+		
+	const eventRepo = getRepository(Event);
+	const events = await eventRepo.createQueryBuilder('event')
+		.select(["event.id", "event.name", "event.start_time", "event.end_time","event.description"])
+		.innerJoin("event.user", "user")
+		.where('user.email = :email', {email: email})
+		.getMany();
+	
+	res.status(200).json({events})
+	
+	} catch(err) {
+	
+		res.status(400).json({message: err.message})
+		
+	}
+		
+}
+
+
+
 export async function updateEvent(req: Request, res: Response) {
 	
 	const id = req.body.id;

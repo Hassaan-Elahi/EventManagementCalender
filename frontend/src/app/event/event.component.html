@@ -1,19 +1,27 @@
 
-<div class="mt-5">
+<div class="mt-4">
+    <div class="row mb-2">
+        <div class="col-md-2">
+            <button (click)="openModal()" type="button" class="btn btn-info">Create Event</button>
+        </div>
+    </div>
     <div class="row">
         <div class="col-md-5">
             <app-monthpicker (change)="onDateChange($event) "></app-monthpicker>
         </div>
-        <div class="col-md-4">
-            <app-event-table [monthIndex]="monthIndex" [year]="year"></app-event-table>
+        <div class="col-md-7">
+            <app-event-table (onEventsChanged)="onEventsChanged($event)"  [monthIndex]="monthIndex" [year]="year"></app-event-table>
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-md-1">
-            <button (click)="openModal()" type="button" class="btn btn-info">Create Event</button>
+
+    <div class="col-md-19">
+            <app-event-detail-table [width]="'1007px'" [height]="'300px'" [events]="events" [isActionType]="true" ></app-event-detail-table>
         </div>
-    </div>
+    
+    
+    
+   
 </div>
 
 

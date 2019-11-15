@@ -5,7 +5,8 @@
 export const environment = {
   dateTimeFormat: 'YYYY-MM-DDTHH:mm',
   JWT_SECRET: "gtwsWhEm8Q2HrMUAX",
-  JWT_DEFAULT_EXPIRY: 400
+  JWT_DEFAULT_EXPIRY: 400,
+  dateTimePrettyFormat: 'ddd, DD MMM YYYY  HH:mm '
 };
 
 /*

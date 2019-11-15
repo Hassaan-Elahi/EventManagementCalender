@@ -27,3 +27,27 @@ export async function login (req: Request, res: Response)
 		res.status(401).send({ error: "unAuthorized"} )
 	}
 }
+
+
+export async function resetPassword(req: Request, res: Response) {
+	
+	const userRepo = getRepository(User);
+	let user = null;
+	try {
+		user = await userRepo.findOneOrFail(res.locals.currentUserId)
+	} 
+	catch (e) {
+		res.status(404).json({message: e.message})	
+	}
+	
+	user.password = req.body.password;
+	await userRepo.save(user);
+	
+	// // sending new token -- ASK
+	// const newToken = jwt.sign(res.locals.currentUserId, environment.JWT_SECRET);
+	// res.cookie("token", newToken, { httpOnly:true });
+	//
+	
+	res.status(200).json({});
+	
+}

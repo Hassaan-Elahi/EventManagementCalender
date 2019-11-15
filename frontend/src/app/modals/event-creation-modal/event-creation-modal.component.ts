@@ -1,9 +1,9 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {BsModalRef, BsModalService} from "ngx-bootstrap";
 import { ToastrService } from 'ngx-toastr';
-import {EventService} from "../services/event.service";
+import {EventService} from "../../services/event.service";
 import * as moment from 'moment';
-import {environment} from "../../environments/environment";
+import {environment} from "../../../environments/environment";
 
 
 @Component({
@@ -92,7 +92,7 @@ export class EventCreationModalComponent implements OnInit {
       const sTime = moment(this.startTime, environment.dateTimeFormat);
       const eTime = moment(this.endTime, environment.dateTimeFormat);
   
-      const data = { name: this.name, startTime: sTime.utc().format(environment.dateTimeFormat), endTime: eTime.utc().format(environment.dateTimeFormat), description: this.description,};
+      const data = { name: this.name, startTime: ( new Date(this.startTime)), endTime: (new Date(this.endTime)), description: this.description,};
       this.eventService.createEvent(data)
           .then(res => {
         

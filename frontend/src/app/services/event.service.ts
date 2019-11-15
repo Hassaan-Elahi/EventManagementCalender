@@ -40,9 +40,21 @@ export class EventService {
   }
   
   
-  public getEvent (id) {
+  public resetPassword(password) {
+    return this.http.post(environment.baseUrl+'reset-password', {password: password})
+        .toPromise();
+  }
+  
+  
+  public getEvents (year, month, date) {
     return this.http
-        .get(environment.baseUrl + `get-event/${id}`)
+        .get(environment.baseUrl + `event/${year}/${month}/${date}`)
+        .toPromise()
+  }
+  
+  public getEventsByEmail(email) {
+    return this.http
+        .get(environment.baseUrl + 'get-events-email' , {params: {email: email}})
         .toPromise()
   }
   

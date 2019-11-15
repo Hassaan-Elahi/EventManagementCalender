@@ -12,7 +12,7 @@ import { HomeComponent } from './home/home.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { IgxCalendarModule } from 'igniteui-angular';
 import { MonthpickerComponent } from './monthpicker/monthpicker.component';
-import { EventCreationModalComponent } from './event-creation-modal/event-creation-modal.component';
+import { EventCreationModalComponent } from './modals/event-creation-modal/event-creation-modal.component';
 import { ModalModule } from 'ngx-bootstrap';
 import {ToastrService} from "ngx-toastr";
 import {ToastrModule} from "ngx-toastr";
@@ -23,6 +23,11 @@ import { SideBarComponent } from './side-bar/side-bar.component';
 import { ProfileComponent } from './profile/profile.component';
 import { EventComponent } from './event/event.component';
 import { ButtonsModule } from '@progress/kendo-angular-buttons';
+import { ViewEventModalComponent } from './modals/view-event-modal/view-event-modal.component';
+import { DeleteEventModalComponent } from './modals/delete-event-modal/delete-event-modal.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import { SharedEventComponent } from './shared-event/shared-event.component';
+import { EventDetailTableComponent } from './event-detail-table/event-detail-table.component';
 
 
 
@@ -37,6 +42,11 @@ import { ButtonsModule } from '@progress/kendo-angular-buttons';
     SideBarComponent,
     ProfileComponent,
     EventComponent,
+    ViewEventModalComponent,
+    DeleteEventModalComponent,
+    ResetPasswordComponent,
+    SharedEventComponent,
+    EventDetailTableComponent,
   ],
   imports: [
     BrowserModule,
@@ -65,7 +75,7 @@ import { ButtonsModule } from '@progress/kendo-angular-buttons';
       
   ],
   bootstrap: [AppComponent],
-  entryComponents: [EventCreationModalComponent]
+  entryComponents: [EventCreationModalComponent, ViewEventModalComponent, DeleteEventModalComponent]
 })
 export class AppModule {
 }

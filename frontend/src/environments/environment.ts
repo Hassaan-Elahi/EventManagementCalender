@@ -5,7 +5,8 @@
 export const environment = {
   production: false,
   dateTimeFormat: 'YYYY-MM-DDTHH:mm',
-  baseUrl: 'http://localhost:3000/'
+  baseUrl: 'http://localhost:3000/',
+  dateTimePrettyFormat: 'ddd, DD MMM YYYY  HH:mm '
 };
 
 /*

@@ -1,7 +1,7 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {IgxMonthPickerComponent} from "igniteui-angular";
 import {MomentAll} from "ngx-bootstrap/chronos/test/chain";
-import { EventCreationModalComponent} from "../event-creation-modal/event-creation-modal.component";
+import { EventCreationModalComponent} from "../modals/event-creation-modal/event-creation-modal.component";
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import {EventService} from "../services/event.service";
 import {ToastrService} from "ngx-toastr";
