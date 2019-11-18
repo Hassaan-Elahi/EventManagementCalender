@@ -47,7 +47,7 @@ function deleteEvent(req, res) {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    id = parseInt(req.params.id);
+                    id = req.params.id;
                     eventRepo = typeorm_1.getRepository(event_1.Event);
                     _a.label = 1;
                 case 1:

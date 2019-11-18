@@ -8,15 +8,16 @@ import {BsModalRef, BsModalService} from "ngx-bootstrap";
 })
 export class ViewEventModalComponent implements OnInit {
 
-  public modalRef: BsModalRef;
   public name: string;
   public startTime: string;
   public endTime: string;
   public description: string;
-  
-  constructor() { }
+
+  constructor( public modalRef: BsModalRef){ }
 
   ngOnInit() {
   }
+
+
 
 }

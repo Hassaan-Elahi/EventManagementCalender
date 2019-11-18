@@ -10,18 +10,18 @@
             <app-monthpicker (change)="onDateChange($event) "></app-monthpicker>
         </div>
         <div class="col-md-7">
-            <app-event-table (onEventsChanged)="onEventsChanged($event)"  [monthIndex]="monthIndex" [year]="year"></app-event-table>
+            <app-event-table (onCellClickedEmitter)="onEventTableCellClicked($event)"  [monthIndex]="monthIndex" [year]="year"></app-event-table>
         </div>
     </div>
 
 
     <div class="col-md-19">
-            <app-event-detail-table [width]="'1007px'" [height]="'300px'" [events]="events" [isActionType]="true" ></app-event-detail-table>
+            <app-event-detail-table  (onChangeEventEmitter)="onChangeEvent()" [width]="'1007px'" [height]="'300px'" [events]="events" [isActionType]="true" ></app-event-detail-table>
         </div>
-    
-    
-    
-   
+
+
+
+
 </div>
 
 

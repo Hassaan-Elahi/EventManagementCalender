@@ -14,7 +14,7 @@ import {environment} from "../../environments/environment";
 export class EventTableComponent implements OnInit {
 
 
-  @Output() onEventsChanged = new EventEmitter();
+  @Output() onCellClickedEmitter = new EventEmitter();
   @Input()  monthIndex: number;
   @Input() year: number;
   public rowData: any;
@@ -57,7 +57,7 @@ export class EventTableComponent implements OnInit {
   renderCell(item) {
 
     if (item.value.event) {
-      return '<div class="text-success font-weight-bold">' + item.value.date + '</div>';
+      return '<div style="background-color:lightgray" class="text-danger font-weight-bold">' + item.value.date + '</div>';
 
     } else {
 
@@ -69,10 +69,10 @@ export class EventTableComponent implements OnInit {
 
   onCellClicked(event) {
 
-        if (event.value.length === 0) {
+        if (event.value.event === null) {
           this.toastr.info("No Events on this date");
         }
-        this.onEventsChanged.emit(event.value);
+        this.onCellClickedEmitter.emit(event.value);
 
   }
 
@@ -96,7 +96,6 @@ export class EventTableComponent implements OnInit {
   checkEvent(date) {
 
     const events = [];
-    console.log(this.events.events);
     for ( let i of this.events.events ) {
 
       let startDate = new Date(i.start_time);
@@ -115,6 +114,22 @@ export class EventTableComponent implements OnInit {
     }
 
   }
+
+
+
+  // use this.ReloadData() here, --- simple solution
+  removeEvent(deletedEventId: string) {
+    for (let e of this.rowData) {
+      for (let weekObj of e) {
+        if (weekObj === 'events') {
+          if(e[weekObj]) {
+            console.log(e);
+          }
+        }
+      }
+    }
+  }
+
 
 
   async prepareData (month: number, year: number)

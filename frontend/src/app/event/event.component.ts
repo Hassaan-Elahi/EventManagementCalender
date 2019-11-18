@@ -18,7 +18,7 @@ export class EventComponent implements OnInit {
   public eventModal: BsModalRef;
   public monthIndex: number;
   public year: number;
-  public events: any;
+  public events: any = [];
 
 
   constructor(private modalService: BsModalService, private eventService: EventService,
@@ -32,7 +32,7 @@ export class EventComponent implements OnInit {
   openModal() {
     this.eventModal = this.modalService.show(EventCreationModalComponent, {
       initialState :{
-        type: 'creation'
+        type: 'create'
       }
     });
     const modal = this.modalService.onHide.subscribe( result => {
@@ -51,12 +51,18 @@ export class EventComponent implements OnInit {
     this.year = event.year
   }
 
-  // got new events on a particular date from eventTable now want to display
-  // this on eventDetailTable so giving input
-  //this.events is bind to event-detail-table
-  onEventsChanged(changeEvent) {
-    console.log("in onEventsChanged");
-    this.events = changeEvent.event;
+  // event has been changed in event-detail component
+  // eventTable has to be reloaded
+  onChangeEvent() {
+    this.eventTable.ReloadData();
+  }
+
+
+  // this event is emitted
+  onEventTableCellClicked(event) {
+    this.events = event.event;
+
 
   }
+
 }

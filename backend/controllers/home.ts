@@ -9,7 +9,7 @@ import {MoreThanOrEqual, LessThanOrEqual, MoreThan, LessThan, Raw, Brackets} fro
 
 export async function deleteEvent(req: Request, res: Response) {
 
-	const id = parseInt(req.params.id);
+	const id = req.params.id;
 	const eventRepo = getRepository(Event);
 	
 	try {

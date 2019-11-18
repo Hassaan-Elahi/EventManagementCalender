@@ -1,14 +1,14 @@
 <div class="modal-header">
-<h4 class="modal-title pull-left">{{title}}</h4>
+<h4 class="modal-title">{{title}}</h4>
 <button type="button" class="close pull-right" aria-label="Close" (click)="bsModalRef.hide()">
     <span aria-hidden="true">&times;</span>
 </button>
 </div>
 <div class="modal-body">
-    <div class="form-group-report-align form-footer text-left">
+    <div class="form-group">
     <span class="input-group-btn ">
-      <button class="btn btn-pill btn-secondary m-r-10" type="submit" (click)="confirmation('yes')">Yes</button>
-      <button class="btn btn-pill btn-primary" type="submit" (click)="confirmation('no')">No</button>
+      <button class="btn btn-danger  mr-2" type="submit" (click)="confirmation('yes')">Yes</button>
+      <button class="btn btn-primary" type="submit" (click)="confirmation('no')">No</button>
     </span>
     </div>
 </div>

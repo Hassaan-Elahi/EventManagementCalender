@@ -1,25 +1,37 @@
 <div class="modal-body">
+  <div class="container">
 
-    <div class="form-group">
-        <label class="col-form-label font-weight-bold ">Event Name</label>
-        <label class="form-control">{{name}}</label>
-    </div>
-    <div class="form-group">
+      <div class="row">
+        <label class="font-weight-bold ">Event Name</label>
+      </div>
 
-        <label class="col-form-label font-weight-bold ">Event Start Time</label>
-        <label class="form-control">{{startTime}}</label>
-    </div>
-    <div class="form-group">
-        <label class="col-form-label font-weight-bold ">Event End Time</label>
-        <label class="form-control">{{endTime}}</label>
-    </div>
-    <div class="form-group">
-        <label class="col-form-label font-weight-bold ">Description</label>
-        <label class="form-control">{{description}}</label>
-    </div>
+      <div class="row">
+        <label>{{name}}</label>
+      </div>
 
-</div>
-<div class="modal-footer">
-    <button (click)="modalRef.hide();" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-    
+      <div class="row mt-2">
+        <label class="font-weight-bold ">Event Start Time</label>
+      </div>
+      <div class="row">
+        <label>{{startTime | date : 'dd MMM yyyy  HH:mm' }}</label>
+      </div>
+
+      <div class="row mt-2">
+        <label class="font-weight-bold ">Event End Time</label>
+      </div>
+
+      <div class="row">
+        <label>{{endTime | date: 'dd MMM yyyy  HH:mm'}}</label>
+      </div>
+
+        <div class="row mt-2">
+          <label class="font-weight-bold ">Description</label>
+        </div>
+        <div>
+          <label>{{description}}</label>
+        </div>
+
+  <div class="modal-footer">
+    <button (click)="modalRef.hide();" type="button" class="btn btn-secondary">Close</button>
+  </div>
 </div>
