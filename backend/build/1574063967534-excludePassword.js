@@ -1,10 +1,9 @@
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
@@ -36,52 +35,24 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var DateToString1573467745655 = /** @class */ (function () {
-    function DateToString1573467745655() {
+var excludePassword1574063967534 = /** @class */ (function () {
+    function excludePassword1574063967534() {
     }
-    DateToString1573467745655.prototype.up = function (queryRunner) {
+    excludePassword1574063967534.prototype.up = function (queryRunner) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, queryRunner.query("ALTER TABLE \"event\" DROP COLUMN \"startTime\"", undefined)];
-                    case 1:
-                        _a.sent();
-                        return [4 /*yield*/, queryRunner.query("ALTER TABLE \"event\" ADD \"startTime\" character varying NOT NULL", undefined)];
-                    case 2:
-                        _a.sent();
-                        return [4 /*yield*/, queryRunner.query("ALTER TABLE \"event\" DROP COLUMN \"endTime\"", undefined)];
-                    case 3:
-                        _a.sent();
-                        return [4 /*yield*/, queryRunner.query("ALTER TABLE \"event\" ADD \"endTime\" character varying NOT NULL", undefined)];
-                    case 4:
-                        _a.sent();
-                        return [2 /*return*/];
-                }
+                return [2 /*return*/];
             });
         });
     };
-    DateToString1573467745655.prototype.down = function (queryRunner) {
+    excludePassword1574063967534.prototype.down = function (queryRunner) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, queryRunner.query("ALTER TABLE \"event\" DROP COLUMN \"endTime\"", undefined)];
-                    case 1:
-                        _a.sent();
-                        return [4 /*yield*/, queryRunner.query("ALTER TABLE \"event\" ADD \"endTime\" TIMESTAMP NOT NULL", undefined)];
-                    case 2:
-                        _a.sent();
-                        return [4 /*yield*/, queryRunner.query("ALTER TABLE \"event\" DROP COLUMN \"startTime\"", undefined)];
-                    case 3:
-                        _a.sent();
-                        return [4 /*yield*/, queryRunner.query("ALTER TABLE \"event\" ADD \"startTime\" TIMESTAMP NOT NULL", undefined)];
-                    case 4:
-                        _a.sent();
-                        return [2 /*return*/];
-                }
+                return [2 /*return*/];
             });
         });
     };
-    return DateToString1573467745655;
+    return excludePassword1574063967534;
 }());
-exports.DateToString1573467745655 = DateToString1573467745655;
-//# sourceMappingURL=1573467745655-DateToString.js.map
+exports.excludePassword1574063967534 = excludePassword1574063967534;
+//# sourceMappingURL=1574063967534-excludePassword.js.map

@@ -8,7 +8,7 @@ import {MoreThanOrEqual, LessThanOrEqual, MoreThan, LessThan, Raw, Brackets} fro
 
 
 export async function deleteEvent(req: Request, res: Response) {
-	
+
 	const id = parseInt(req.params.id);
 	const eventRepo = getRepository(Event);
 	
@@ -39,18 +39,18 @@ export async function getAllEventsMinimal(req: Request, res: Response) {
 			.andWhere(new Brackets( q => 
 			{
 					q.where("date_part('month', event.start_time) = :givenMonth", {givenMonth: month });
-					q.orWhere("date_part('year', event.start_time) = :givenYear", {givenYear: year});
+					q.andWhere("date_part('year', event.start_time) = :givenYear", {givenYear: year});
 			}))
-			.andWhere(new Brackets( q =>
+			.orWhere(new Brackets( q =>
 			{
 				q.where("date_part('month', event.end_time) = :givenMonth", {givenMonth: month });
-				q.orWhere("date_part('year', event.end_time) = :givenYear", {givenYear: year});
+				q.andWhere("date_part('year', event.end_time) = :givenYear", {givenYear: year});
 			}))
 			.getMany();
 			
 		console.log(events);
 		res.status(200).json({events})
-		
+
 	}
 	catch (e) {
 		res.status(500).json({message: e})
@@ -95,12 +95,12 @@ function hasClash(allEvents: Event[], currentEvent: Event): any {
 		returns clashed event for clash 
 		*/
 		
-		const startTime = moment.utc(currentEvent.start_time, environment.dateTimeFormat);
-		const endTime = moment.utc(currentEvent.end_time, environment.dateTimeFormat);
-		
+		let startTime = new Date(currentEvent.start_time);
+		let endTime = new Date(currentEvent.end_time);
+
 		for (let e of allEvents) {
-			const eStartTime = moment.utc(e.start_time, environment.dateTimeFormat);
-			const eEndTime = moment.utc(e.end_time, environment.dateTimeFormat);
+			const eStartTime = new Date(e.start_time);
+			const eEndTime = new Date(e.end_time);
 			
 			// for clash condition
 			if (!(endTime <= eStartTime || startTime >= eEndTime) ) {
@@ -119,7 +119,9 @@ export async function createEvent(req: Request, res: Response) {
 	const endTime = req.body.endTime;
 	const description = req.body.description;
 	const eventRepo = getRepository(Event);
-	
+	const startDate = new Date(startTime);
+	const endDate = new Date(endTime);
+
 	const allEvents = await eventRepo.find({where: {user: res.locals.currentUserId}});
 	
 	//could be optimized here

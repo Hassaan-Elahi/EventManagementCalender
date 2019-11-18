@@ -12,8 +12,8 @@ import {environment} from "../../environments/environment";
   styleUrls: ['./event-table.component.css']
 })
 export class EventTableComponent implements OnInit {
-  
-  
+
+
   @Output() onEventsChanged = new EventEmitter();
   @Input()  monthIndex: number;
   @Input() year: number;
@@ -21,9 +21,9 @@ export class EventTableComponent implements OnInit {
   public events: any;
   eventModal: BsModalRef;
   eventListModal: BsModalRef;
-  
-  
-  
+
+
+
   columnDefs = [
     {headerName: 'Sunday', field: '0',width: 80, cellRenderer: this.renderCell },
     {headerName: 'Monday', field: '1',width: 80, cellRenderer: this.renderCell },
@@ -32,79 +32,79 @@ export class EventTableComponent implements OnInit {
     {headerName: 'Thursday', field: '4',width: 80, cellRenderer: this.renderCell },
     {headerName: 'Friday', field: '5',width: 80, cellRenderer: this.renderCell },
     {headerName: 'Saturday', field: '6',width: 80, cellRenderer: this.renderCell },
-  
+
   ];
-  
-  
-  
+
+
+
   constructor(private modalService: BsModalService, private eventService: EventService,
               private toastr: ToastrService) {
-    
-    
+
+
   }
-  
-  
-  
+
+
+
   ngOnInit() {
   }
-  
-  
+
+
   ngOnChanges() {
     this.ReloadData()
   }
-  
-  
+
+
   renderCell(item) {
-    
+
     if (item.value.event) {
       return '<div class="text-success font-weight-bold">' + item.value.date + '</div>';
-      
+
     } else {
-      
+
       return '<div>' + item.value.date + '</div>';
     }
   }
-  
-  
-  
+
+
+
   onCellClicked(event) {
-    
+
         if (event.value.length === 0) {
           this.toastr.info("No Events on this date");
         }
         this.onEventsChanged.emit(event.value);
-        
+
   }
-  
+
    public ReloadData() {
-    
+
     this.prepareData(this.monthIndex, this.year).then( data => {
-      
+
       this.rowData = data;
-      
+
     }).catch(err => {
-      
+
       this.toastr.error(err.message);
     })
   }
-  
-  
-  
+
+
+
   // this function will get date and return if this date has an event or list of events or not
   // and will use this.events
   //
   checkEvent(date) {
-    
-    const events = []; 
+
+    const events = [];
     console.log(this.events.events);
     for ( let i of this.events.events ) {
-      
-      let startDate = moment(i.startTime).date();
-      let endDate = moment(i.endTime).date();
-      
+
+      let startDate = new Date(i.start_time);
+      let endDate = new Date(i.end_time);
+
       // if date is inbetween end date or start Date
       // we want to show all days in which the event occur
-      if (startDate <= date && date <= endDate  ) {
+      if (startDate.getDate() <= date && date <= endDate.getDate()  ) {
         events.push(i);
       }
     }
@@ -113,10 +113,10 @@ export class EventTableComponent implements OnInit {
     } else {
       return events;
     }
-    
+
   }
-  
-  
+
+
   async prepareData (month: number, year: number)
   {
     const date = new Date(year, month, 1);
@@ -125,8 +125,8 @@ export class EventTableComponent implements OnInit {
     const lastDay = new Date(date.getFullYear(), date.getMonth()+1, 0).getDay();
     const rowData = [];
     this.events =  await this.eventService.getAllEvents(month, year);
-    
-    
+
+
     //weeks
     for (let i = 1; i <= 5; i++ )
     {
@@ -163,17 +163,17 @@ export class EventTableComponent implements OnInit {
           weekobj[d.toString()] = { date: date.getDate(), event: this.checkEvent(date.getDate()) };
           date.setDate(date.getDate() + 1);
         }
-        
+
       }
-      
+
       rowData.push(weekobj);
     }
-    
-    
+
+
     return rowData;
-    
+
   }
-  
-  
-  
+
+
+
 }

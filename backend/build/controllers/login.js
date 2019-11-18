@@ -1,10 +1,9 @@
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
@@ -37,6 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var typeorm_1 = require("typeorm");
+var class_transformer_1 = require("class-transformer");
 var user_1 = require("../entity/user");
 var jwt = require("jsonwebtoken");
 var environment_1 = require("../environment");
@@ -57,7 +57,7 @@ function login(req, res) {
                     if (user !== undefined && user.password === password) {
                         token = jwt.sign(user.id, environment_1.environment.JWT_SECRET);
                         res.cookie("token", token, { httpOnly: true });
-                        res.status(200).json({ user: user, token: token });
+                        res.status(200).json({ user: class_transformer_1.classToPlain(user), token: token });
                     }
                     else {
                         res.status(401).send({ error: "unAuthorized" });

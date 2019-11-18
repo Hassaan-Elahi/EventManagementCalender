@@ -11,24 +11,24 @@ import {EventTableComponent} from "../event-table/event-table.component";
   styleUrls: ['./event.component.css']
 })
 export class EventComponent implements OnInit {
-  
+
   @ViewChild(EventTableComponent, {static: false})
-  
+
   eventTable: EventTableComponent;
   public eventModal: BsModalRef;
   public monthIndex: number;
   public year: number;
   public events: any;
 
-  
+
   constructor(private modalService: BsModalService, private eventService: EventService,
               private toastr: ToastrService) {}
-  
-  
+
+
   ngOnInit() {
-    
+
   }
-  
+
   openModal() {
     this.eventModal = this.modalService.show(EventCreationModalComponent, {
       initialState :{
@@ -40,23 +40,23 @@ export class EventComponent implements OnInit {
       modal.unsubscribe();
     });
   }
-  
-  
+
+
   onDateChange(event: { monthIndex: number; year: number }) {
-    
+
     // onDataChange will be called when month and year changed on the calender
     // we will change this.monthIndex and this.year which is binded to eventTableComponent
     // and on ngOnChanges() in eventTableComponent will reload the data of events
     this.monthIndex = event.monthIndex;
     this.year = event.year
   }
-  
+
   // got new events on a particular date from eventTable now want to display
   // this on eventDetailTable so giving input
   //this.events is bind to event-detail-table
   onEventsChanged(changeEvent) {
     console.log("in onEventsChanged");
-    this.events = changeEvent.event
-    
+    this.events = changeEvent.event;
+
   }
 }

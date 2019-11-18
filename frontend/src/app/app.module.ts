@@ -28,6 +28,8 @@ import { DeleteEventModalComponent } from './modals/delete-event-modal/delete-ev
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { SharedEventComponent } from './shared-event/shared-event.component';
 import { EventDetailTableComponent } from './event-detail-table/event-detail-table.component';
+import {AuthService} from "./services/auth.service";
+import {LoggedInGuardService} from "./services/logged-in-guard.service";
 
 
 
@@ -60,19 +62,22 @@ import { EventDetailTableComponent } from './event-detail-table/event-detail-tab
     ModalModule.forRoot(),
     BrowserAnimationsModule,
     ButtonsModule,
-      
+
   ],
   providers: [
     LoginService,
     ToastrService,
     CookieService,
+    AuthService,
+    LoggedInGuardService,
+
     {
       provide: HTTP_INTERCEPTORS,
       useClass: headerInterceptor,
       multi: true
     },
-    
-      
+
+
   ],
   bootstrap: [AppComponent],
   entryComponents: [EventCreationModalComponent, ViewEventModalComponent, DeleteEventModalComponent]

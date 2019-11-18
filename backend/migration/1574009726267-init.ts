@@ -1,6 +1,6 @@
 import {MigrationInterface, QueryRunner} from "typeorm";
 
-export class changeStringToDate1573547884404 implements MigrationInterface {
+export class init1574009726267 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<any> {
     }

@@ -1,10 +1,9 @@
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
@@ -85,11 +84,11 @@ function getAllEventsMinimal(req, res) {
                             .where("event.user = :id", { id: res.locals.currentUserId })
                             .andWhere(new typeorm_2.Brackets(function (q) {
                             q.where("date_part('month', event.start_time) = :givenMonth", { givenMonth: month });
-                            q.orWhere("date_part('year', event.start_time) = :givenYear", { givenYear: year });
+                            q.andWhere("date_part('year', event.start_time) = :givenYear", { givenYear: year });
                         }))
-                            .andWhere(new typeorm_2.Brackets(function (q) {
+                            .orWhere(new typeorm_2.Brackets(function (q) {
                             q.where("date_part('month', event.end_time) = :givenMonth", { givenMonth: month });
-                            q.orWhere("date_part('year', event.end_time) = :givenYear", { givenYear: year });
+                            q.andWhere("date_part('year', event.end_time) = :givenYear", { givenYear: year });
                         }))
                             .getMany()];
                 case 2:
@@ -122,9 +121,7 @@ function getEvents(req, res) {
                 case 1:
                     _a.trys.push([1, 3, , 4]);
                     return [4 /*yield*/, eventRepo.find({
-                            where: { userId: res.locals.currentUserId,
-                                start_time: typeorm_2.MoreThanOrEqual(givenDate),
-                                end_time: typeorm_2.LessThanOrEqual(givenDate) },
+                            where: { userId: res.locals.currentUserId, start_time: typeorm_2.MoreThanOrEqual(givenDate), end_time: typeorm_2.LessThanOrEqual(givenDate) },
                         })];
                 case 2:
                     event = _a.sent();
@@ -146,12 +143,12 @@ function hasClash(allEvents, currentEvent) {
     returns null for no clash
     returns clashed event for clash
     */
-    var startTime = moment.utc(currentEvent.start_time, environment_1.environment.dateTimeFormat);
-    var endTime = moment.utc(currentEvent.end_time, environment_1.environment.dateTimeFormat);
+    var startTime = new Date(currentEvent.start_time);
+    var endTime = new Date(currentEvent.end_time);
     for (var _i = 0, allEvents_1 = allEvents; _i < allEvents_1.length; _i++) {
         var e = allEvents_1[_i];
-        var eStartTime = moment.utc(e.start_time, environment_1.environment.dateTimeFormat);
-        var eEndTime = moment.utc(e.end_time, environment_1.environment.dateTimeFormat);
+        var eStartTime = new Date(e.start_time);
+        var eEndTime = new Date(e.end_time);
         // for clash condition
         if (!(endTime <= eStartTime || startTime >= eEndTime)) {
             return e;
@@ -161,7 +158,7 @@ function hasClash(allEvents, currentEvent) {
 }
 function createEvent(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var name, startTime, endTime, description, eventRepo, allEvents, event, _a, clashEvent, e_3;
+        var name, startTime, endTime, description, eventRepo, startDate, endDate, allEvents, event, _a, clashEvent, e_3;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
@@ -170,6 +167,8 @@ function createEvent(req, res) {
                     endTime = req.body.endTime;
                     description = req.body.description;
                     eventRepo = typeorm_1.getRepository(event_1.Event);
+                    startDate = new Date(startTime);
+                    endDate = new Date(endTime);
                     return [4 /*yield*/, eventRepo.find({ where: { user: res.locals.currentUserId } })];
                 case 1:
                     allEvents = _b.sent();

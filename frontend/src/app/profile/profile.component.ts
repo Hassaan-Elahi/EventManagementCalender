@@ -10,15 +10,14 @@ export class ProfileComponent implements OnInit {
 
   public name;
   public email;
-  
+
   constructor() { }
 
   ngOnInit() {
-    
+
     const user = JSON.parse(localStorage.getItem('currentUser'));
     this.name = user['name'];
     this.email = user['email'];
-    
   }
 
 }

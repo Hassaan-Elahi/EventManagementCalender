@@ -12,7 +12,7 @@ createConnection()
 	.then(async connection => {
 		// Create a new express application instance
 		const app = express();
-		
+		process.env.TZ = 'UTC';
 		// simple middle ware to handle cross-origin requests
 		app.use(function(req, res, next) {
 			res.header("Access-Control-Allow-Origin", "http://localhost:4200");

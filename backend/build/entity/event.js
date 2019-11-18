@@ -15,7 +15,7 @@ var Event = /** @class */ (function () {
     function Event() {
     }
     __decorate([
-        typeorm_1.PrimaryGeneratedColumn(),
+        typeorm_1.PrimaryGeneratedColumn('uuid'),
         __metadata("design:type", Number)
     ], Event.prototype, "id", void 0);
     __decorate([

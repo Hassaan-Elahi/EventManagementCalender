@@ -13,12 +13,13 @@ export class SideBarComponent implements OnInit {
 
   ngOnInit() {
   }
-  
+
   logout(event) {
-  	
+
     this.cookieService.deleteAll();
+    localStorage.clear();
     this.router.navigate(['login'])
-    
+
   }
 
 }

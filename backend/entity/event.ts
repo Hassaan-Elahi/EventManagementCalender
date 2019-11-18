@@ -4,14 +4,15 @@ import {User} from "./user";
 @Entity()
 export class Event {
 	
-	@PrimaryGeneratedColumn()
+	@PrimaryGeneratedColumn('uuid')
 	id: number;
 	
 	@Column()
 	name: string;
-	
+
 	@Column()
 	start_time: Date;
+
 	@Column()
 	end_time: Date;
 	

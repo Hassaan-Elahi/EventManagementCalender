@@ -1,16 +1,18 @@
 import {Entity, PrimaryGeneratedColumn, Column, OneToMany, Unique} from "typeorm";
+import { Exclude, Expose } from "class-transformer";
 import {Event} from "./event";
 
 @Entity()
 @Unique(['email'])
 export class User {
 	
-	@PrimaryGeneratedColumn()
+	@PrimaryGeneratedColumn('uuid')
 	id: number;
 	
 	@Column()
 	email: string;
-	
+
+	@Exclude()
 	@Column()
 	password: string;
 	

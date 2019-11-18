@@ -1,5 +1,6 @@
 import { getRepository } from 'typeorm'
 import { Request, Response } from 'express';
+import {classToPlain, TransformClassToPlain} from "class-transformer";
 import {User} from "../entity/user";
 import * as jwt from 'jsonwebtoken';
 import {environment} from "../environment";
@@ -19,7 +20,7 @@ export async function login (req: Request, res: Response)
 		const token = jwt.sign(user.id, environment.JWT_SECRET);
 		
 		res.cookie("token", token, { httpOnly:true });
-		res.status(200).json( {user: user, token: token} );
+		res.status(200).json( {user: classToPlain(user), token: token} );
 		
 	}
 	else 

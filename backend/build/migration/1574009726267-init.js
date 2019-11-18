@@ -1,10 +1,9 @@
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
@@ -36,52 +35,24 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var changeTableName1573547915667 = /** @class */ (function () {
-    function changeTableName1573547915667() {
+var init1574009726267 = /** @class */ (function () {
+    function init1574009726267() {
     }
-    changeTableName1573547915667.prototype.up = function (queryRunner) {
+    init1574009726267.prototype.up = function (queryRunner) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, queryRunner.query("ALTER TABLE \"event\" DROP COLUMN \"start_time\"", undefined)];
-                    case 1:
-                        _a.sent();
-                        return [4 /*yield*/, queryRunner.query("ALTER TABLE \"event\" ADD \"start_time\" TIMESTAMP NOT NULL", undefined)];
-                    case 2:
-                        _a.sent();
-                        return [4 /*yield*/, queryRunner.query("ALTER TABLE \"event\" DROP COLUMN \"end_time\"", undefined)];
-                    case 3:
-                        _a.sent();
-                        return [4 /*yield*/, queryRunner.query("ALTER TABLE \"event\" ADD \"end_time\" TIMESTAMP NOT NULL", undefined)];
-                    case 4:
-                        _a.sent();
-                        return [2 /*return*/];
-                }
+                return [2 /*return*/];
             });
         });
     };
-    changeTableName1573547915667.prototype.down = function (queryRunner) {
+    init1574009726267.prototype.down = function (queryRunner) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, queryRunner.query("ALTER TABLE \"event\" DROP COLUMN \"end_time\"", undefined)];
-                    case 1:
-                        _a.sent();
-                        return [4 /*yield*/, queryRunner.query("ALTER TABLE \"event\" ADD \"end_time\" character varying NOT NULL", undefined)];
-                    case 2:
-                        _a.sent();
-                        return [4 /*yield*/, queryRunner.query("ALTER TABLE \"event\" DROP COLUMN \"start_time\"", undefined)];
-                    case 3:
-                        _a.sent();
-                        return [4 /*yield*/, queryRunner.query("ALTER TABLE \"event\" ADD \"start_time\" character varying NOT NULL", undefined)];
-                    case 4:
-                        _a.sent();
-                        return [2 /*return*/];
-                }
+                return [2 /*return*/];
             });
         });
     };
-    return changeTableName1573547915667;
+    return init1574009726267;
 }());
-exports.changeTableName1573547915667 = changeTableName1573547915667;
-//# sourceMappingURL=1573547915667-changeTableName.js.map
+exports.init1574009726267 = init1574009726267;
+//# sourceMappingURL=1574009726267-init.js.map

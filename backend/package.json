@@ -12,6 +12,7 @@
    "dependencies": {
       "@types/node": "^12.12.5",
       "body-parser": "^1.19.0",
+      "class-transformer": "^0.2.3",
       "cookie-parser": "^1.4.4",
       "cors": "^2.8.5",
       "express": "^4.17.1",
@@ -20,7 +21,8 @@
       "mysql": "^2.14.1",
       "pg": "^7.12.1",
       "reflect-metadata": "^0.1.10",
-      "typeorm": "^0.3.0-alpha.24"
+      "routing-controllers": "^0.8.0",
+      "typeorm": "0.2.19"
    },
    "devDependencies": {
       "nodemon": "^1.19.4",
