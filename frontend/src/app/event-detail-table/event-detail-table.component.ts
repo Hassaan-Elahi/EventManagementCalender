@@ -144,8 +144,8 @@ export class EventDetailTableComponent implements OnInit {
         type: 'edit',
         id: data['id'],
         name: data['name'],
-        startTime: new Date(data['start_time']),
-        endTime: new Date(data['end_time']),
+        startTime: moment(new Date(data['start_time'])).format(environment.dateTimeFormat),
+        endTime: moment(new Date(data['end_time'])).format(environment.dateTimeFormat),
         description: data['description'],
       }
 
