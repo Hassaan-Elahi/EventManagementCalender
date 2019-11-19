@@ -18,11 +18,6 @@ export class EventCreationModalComponent implements OnInit {
   public startTime: any = null;
   public endTime: any = null;
   public description: string = "";
-  private readOnly = true;
-  private isUpdateHidden = false;
-  private isSaveHidden = true;
-  private isDeleteHidden = false;
-  private isUpdateSentHidden = true;
   public type: string;
 
 
@@ -30,27 +25,12 @@ export class EventCreationModalComponent implements OnInit {
               public eventService: EventService) { }
 
 
-  changeView(type) {
-    if (type === 'view') {
-
-      this.readOnly = true;
-      this.isUpdateHidden = false;
-      this.isDeleteHidden = false;
-      this.isSaveHidden = true;
-
-    } else {
-      this.readOnly = false;
-      this.isUpdateHidden=true;
-      this.isDeleteHidden=true;
-      this.isSaveHidden=false;
-    }
-
-  }
-
   ngOnInit()
   {
-    this.changeView(this.type);
+
   }
+
+
 
 
   IsEventValid(data: { name: string; description: string; startTime: any; endTime: any }) {

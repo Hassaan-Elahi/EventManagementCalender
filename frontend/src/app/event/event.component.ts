@@ -4,6 +4,8 @@ import {EventService} from "../services/event.service";
 import {ToastrService} from "ngx-toastr";
 import {EventCreationModalComponent} from "../modals/event-creation-modal/event-creation-modal.component";
 import {EventTableComponent} from "../event-table/event-table.component";
+import * as moment from "moment";
+import {environment} from "../../environments/environment";
 
 @Component({
   selector: 'app-event',
@@ -29,10 +31,15 @@ export class EventComponent implements OnInit {
 
   }
 
+
+  // Create event modal open, pre filled with current date
   openModal() {
     this.eventModal = this.modalService.show(EventCreationModalComponent, {
       initialState :{
-        type: 'create'
+        type: 'create',
+        startTime: moment((new Date())).format(environment.dateTimeFormat),
+        endTime: moment((new Date())).format(environment.dateTimeFormat),
+
       }
     });
     const modal = this.modalService.onHide.subscribe( result => {
