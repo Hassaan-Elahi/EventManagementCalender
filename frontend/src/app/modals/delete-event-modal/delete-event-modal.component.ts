@@ -8,21 +8,21 @@ import {BsModalRef, BsModalService} from "ngx-bootstrap";
 })
 export class DeleteEventModalComponent implements OnInit {
 
-  private title: string;
+  public title: string;
   constructor(public bsModalRef: BsModalRef,
-              private modalService: BsModalService) 
+              private modalService: BsModalService)
   { }
-              
-  
+
+
   ngOnInit() {
-    
+
   }
 
   confirmation(result) {
     this.modalService.setDismissReason(result);
     this.bsModalRef.hide();
-    
+
   }
-  
-  
+
+
 }
