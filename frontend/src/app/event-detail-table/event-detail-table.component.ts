@@ -28,7 +28,7 @@ export class EventDetailTableComponent implements OnInit, OnChanges {
   @Output() onPaginationEventEmitter = new EventEmitter<{pageNo: number, pageSize: number}>();
 
 
-  private columnDefs: any;
+  columnDefs: any;
   viewEventModal: BsModalRef;
   editEventModal: BsModalRef;
   deleteEventModal: BsModalRef;
