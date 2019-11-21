@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, OnChanges, SimpleChanges} from '@angular/core';
 import {environment} from "../../environments/environment";
 import * as moment from 'moment'
 import {ToastrService} from "ngx-toastr";
@@ -7,21 +7,25 @@ import {EventCreationModalComponent} from "../modals/event-creation-modal/event-
 import {BsModalRef, BsModalService} from "ngx-bootstrap";
 import {ViewEventModalComponent} from "../modals/view-event-modal/view-event-modal.component";
 import {DeleteEventModalComponent} from "../modals/delete-event-modal/delete-event-modal.component";
+import {GridApi, GridOptions, IDatasource, IGetRowsParams} from "ag-grid-community";
+import {HttpClient} from "@angular/common/http";
 
 @Component({
   selector: 'app-event-detail-table',
   templateUrl: './event-detail-table.component.html',
   styleUrls: ['./event-detail-table.component.css']
 })
-export class EventDetailTableComponent implements OnInit {
+export class EventDetailTableComponent implements OnInit, OnChanges {
 
+  @Input() pageNo: number;
+  @Input() pageSize: number;
   @Input() events: any = [];
   @Input() isActionType: boolean;
   @Input() width: any;
   @Input() height: any;
   @Input() rowHeight: any;
   @Output() onChangeEventEmitter = new EventEmitter();
-
+  @Output() onPaginationEventEmitter = new EventEmitter<{pageNo: number, pageSize: number}>();
 
 
   private columnDefs: any;
@@ -29,9 +33,15 @@ export class EventDetailTableComponent implements OnInit {
   editEventModal: BsModalRef;
   deleteEventModal: BsModalRef;
 
+  isLeftDisabled = true;
+  isRightDisabled = false;
+
+
+
   constructor(private toastr: ToastrService,
               private eventService: EventService,
-              private modalService: BsModalService) { }
+              private modalService: BsModalService,
+              private httpService: HttpClient) { }
 
 
   formatDate(item)  {
@@ -39,6 +49,7 @@ export class EventDetailTableComponent implements OnInit {
   }
 
   ngOnInit() {
+
     if(this.isActionType) {
       this.columnDefs = [
         {headerName: 'Actions', width: 250, resizable:  true,cellRenderer: this.renderActionButtons, autoHeight: true},
@@ -73,8 +84,6 @@ export class EventDetailTableComponent implements OnInit {
 
   }
 
-
-
   onCellClicked(e) {
 
     if (e.event.target.getAttribute('data-action-type') === 'view') {
@@ -86,7 +95,18 @@ export class EventDetailTableComponent implements OnInit {
     }
   }
 
+ngOnChanges(changes: SimpleChanges): void {
+  console.log(changes);
+  try {
+  if (changes.events.currentValue.length === 0) {
+    this.isRightDisabled = true;
+  } else {
+        this.isRightDisabled = false;
+  }
+  } catch (e) {
 
+  }
+}
 
   private viewEvent(data) {
 
@@ -112,15 +132,10 @@ export class EventDetailTableComponent implements OnInit {
     const modal = this.modalService.onHide.subscribe(result => {
       if (result === "yes") {
         this.eventService.deleteEvent(data.id).then( res => {
-          if(res['deleted'] === true) {
-            this.toastr.success("Event has been deleted successfully");
-            this.RemoveEventLocallyFromDetailComponent(data.id);
-            this.onChangeEventEmitter.emit();
-          }
-          else {
-            this.toastr.error(`Could not remove event:  ${data.name} `);
-          }
 
+          this.toastr.success("Event has been deleted successfully");
+          this.RemoveEventLocallyFromDetailComponent(data.id);
+          this.onChangeEventEmitter.emit();
 
         }).catch( err => {
           this.toastr.error(err.message);
@@ -136,10 +151,11 @@ export class EventDetailTableComponent implements OnInit {
 
   }
 
+
+
   private updateEvent(data) {
 
     this.editEventModal = this.modalService.show(EventCreationModalComponent, {
-
       initialState: {
         type: 'edit',
         id: data['id'],
@@ -151,9 +167,31 @@ export class EventDetailTableComponent implements OnInit {
 
     });
 
+
+    // returnig value form update modal and updating list locally
+    this.modalService.onHide.subscribe((updatedEvent) => {
+
+      console.log(updatedEvent);
+      let tempEvents = null;
+      try {
+        updatedEvent = JSON.parse(updatedEvent);
+        tempEvents = JSON.parse(JSON.stringify(this.events));
+      } catch (e) {
+      }
+      this.events = null;
+      // updating locally
+      for (let e of tempEvents) {
+        if (e.id === updatedEvent.id) {
+          e.name = updatedEvent.name;
+          e.startTime = updatedEvent.startTime;
+          e.endTime = updatedEvent.endTime;
+          e.description = updatedEvent.description;
+        }
+      }
+      this.events = tempEvents;
+    });
+
   }
-
-
   private RemoveEventLocallyFromDetailComponent(id: any) {
     let tempEvents = [];
     for (let e of this.events) {
@@ -163,5 +201,25 @@ export class EventDetailTableComponent implements OnInit {
     }
     this.events = tempEvents;
 
+  }
+
+  prev() {
+    if (this.pageNo === 2) {
+        this.pageNo = 1;
+        this.isLeftDisabled = true;
+    } else {
+      this.pageNo--;
+    }
+    this.onPaginationEventEmitter.emit({pageNo: this.pageNo, pageSize: this.pageSize})
+  }
+
+  next() {
+    if (this.pageNo == 1) {
+      this.isLeftDisabled = false;
+      this.pageNo = 2
+    } else {
+      this.pageNo++;
+    }
+    this.onPaginationEventEmitter.emit({pageNo: this.pageNo, pageSize: this.pageSize})
   }
 }

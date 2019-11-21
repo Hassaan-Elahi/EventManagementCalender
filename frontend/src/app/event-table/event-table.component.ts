@@ -72,7 +72,7 @@ export class EventTableComponent implements OnInit {
         if (event.value.event === null) {
           this.toastr.info("No Events on this date");
         }
-        this.onCellClickedEmitter.emit(event.value);
+        this.onCellClickedEmitter.emit({ year: this.year, month: this.monthIndex, date: event.value.date });
 
   }
 
@@ -95,24 +95,11 @@ export class EventTableComponent implements OnInit {
   //
   checkEvent(date) {
 
-    const events = [];
-    for ( let i of this.events.events ) {
-
-      let startDate = new Date(i.start_time);
-      let endDate = new Date(i.end_time);
-
-      // if date is inbetween end date or start Date
-      // we want to show all days in which the event occur
-      if (startDate.getDate() <= date && date <= endDate.getDate()  ) {
-        events.push(i);
-      }
-    }
-    if (events.length === 0) {
-      return null;
+    if (date in this.events.dateEvent) {
+      return true;
     } else {
-      return events;
+      return false;
     }
-
   }
 
 
@@ -153,7 +140,7 @@ export class EventTableComponent implements OnInit {
         {
           if (d < day)
           {
-            weekobj[d.toString()] = { date: '', event: [] }
+            weekobj[d.toString()] = { date: '', event: false }
           }
           else
           {
@@ -165,7 +152,7 @@ export class EventTableComponent implements OnInit {
         {
           if (d > lastDay)
           {
-            weekobj[d.toString()] = { date: '', event: [] }
+            weekobj[d.toString()] = { date: '', event: false }
           }
           else
           {

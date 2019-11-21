@@ -7,6 +7,22 @@ import {environment} from "../environment";
 import {MoreThanOrEqual, LessThanOrEqual, MoreThan, LessThan, Raw, Brackets} from "typeorm";
 
 
+
+
+
+function getDates(startDate, stopDate) {
+	var dateArray = [];
+	var currentDate = startDate;
+	while (currentDate.getDate() <= stopDate.getDate()) {
+		dateArray.push((new Date (currentDate)).getDate());
+		currentDate.setDate(currentDate.getDate() + 1)
+	}
+	return dateArray;
+}
+
+
+
+
 export async function deleteEvent(req: Request, res: Response) {
 
 	const id = req.params.id;
@@ -15,7 +31,7 @@ export async function deleteEvent(req: Request, res: Response) {
 	try {
 	
 		await eventRepo.delete(id);
-		res.status(200).json( {deleted: true} );
+		res.status(204).json( {deleted: true} );
 		
 	} catch (e) {
 
@@ -26,8 +42,8 @@ export async function deleteEvent(req: Request, res: Response) {
 }
 
 export async function getAllEventsMinimal(req: Request, res: Response) {
-	
-	
+
+
 	const date = new Date(req.query.year, req.query.month);
 	const eventRepo = getRepository(Event);
 	const month = date.getMonth() + 1;
@@ -36,20 +52,26 @@ export async function getAllEventsMinimal(req: Request, res: Response) {
 	try {
 		const events = await eventRepo.createQueryBuilder('event')
 			.where("event.user = :id", {id: res.locals.currentUserId})
-			.andWhere(new Brackets( q => 
-			{
-					q.where("date_part('month', event.start_time) = :givenMonth", {givenMonth: month });
-					q.andWhere("date_part('year', event.start_time) = :givenYear", {givenYear: year});
+			.andWhere(new Brackets(q => {
+				q.where("(date_part('month', event.start_time) = :givenMonth", {givenMonth: month});
+				q.andWhere("date_part('year', event.start_time) = :givenYear", {givenYear: year});
 			}))
-			.orWhere(new Brackets( q =>
-			{
-				q.where("date_part('month', event.end_time) = :givenMonth", {givenMonth: month });
-				q.andWhere("date_part('year', event.end_time) = :givenYear", {givenYear: year});
+			.orWhere(new Brackets(q => {
+				q.where("date_part('month', event.end_time) = :givenMonth", {givenMonth: month});
+				q.andWhere("date_part('year', event.end_time) = :givenYear)", {givenYear: year});
 			}))
 			.getMany();
-			
-		console.log(events);
-		res.status(200).json({events})
+
+		const dateEvent = {};
+
+		for (let e of events) {
+			const dates = getDates(e.start_time, e.end_time);
+			for (let d of dates) {
+				dateEvent[d] = true;
+			}
+		}
+
+		res.status(200).json({dateEvent})
 
 	}
 	catch (e) {
@@ -60,33 +82,38 @@ export async function getAllEventsMinimal(req: Request, res: Response) {
 }
 
 export async function getEvents(req: Request, res: Response) {
-	
-	let event;
-	const month = req.params.month;
-	const year = req.params.year;
-	const date = req.params.date;
-	const givenDate = new Date(year,month, date);
-	
+
+	let offset = parseInt( req.query.pageNo) - 1;
+	const pageSize = parseInt(req.query.pageSize);
+	offset = offset * pageSize;
+	let month = req.params.month;
+	let year = req.params.year;
+	let date = req.params.date;
+	const startDuration = new Date(year,month, date);
+	const endDuration = new Date(startDuration);
+	endDuration.setHours(endDuration.getHours() + 24);
+
 	
 	const eventRepo = getRepository(Event);
-	
+
+	let events = null;
+
 
 	try {
-
-		event = await eventRepo.find( {
-			where: {userId: res.locals.currentUserId, start_time: MoreThanOrEqual(givenDate), end_time: LessThanOrEqual(givenDate)},
-					});
-
-		res.status(200).json(event);
+		events = await eventRepo.createQueryBuilder('event')
+			.where("event.user = :id", {id: res.locals.currentUserId})
+			.andWhere("not (end_time <= :start OR start_time >= :end)", {start: startDuration, end:endDuration})
+			.orderBy('event.id')
+			.limit(pageSize)
+			.offset(offset)
+			.getMany();
+		console.log(events);
+		res.status(200).json(events);
 
 	} catch(err) {
-
-		console.log(err);   
+		console.log(err);
 		res.status(500).json({message: err.message})
-
 	}
-	
-	
 }
 
 function hasClash(allEvents: Event[], currentEvent: Event): any {
@@ -138,7 +165,7 @@ export async function createEvent(req: Request, res: Response) {
 		
 		try {
 			await eventRepo.save(event);
-			res.status(200).json({message: "Event Saved Successfully"});
+			res.status(201).json({message: "Event Saved Successfully"});
 		} catch (e) {
 			res.status(400).json({message: e});
 		}
@@ -196,7 +223,7 @@ export async function updateEvent(req: Request, res: Response) {
 	
 	try {
 		await eventRepo.save(event);
-		res.status(200).json({message: "Event Saved Successfully"});
+		res.status(204).json({message: "Event Saved Successfully"});
 	} catch (e) {
 		res.status(500).json({message: e});
 	}

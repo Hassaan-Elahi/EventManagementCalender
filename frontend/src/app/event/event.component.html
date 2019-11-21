@@ -16,7 +16,7 @@
 
 
     <div class="col-md-19">
-            <app-event-detail-table  (onChangeEventEmitter)="onChangeEvent()" [width]="'1007px'" [height]="'300px'" [events]="events" [isActionType]="true" ></app-event-detail-table>
+            <app-event-detail-table [pageNo]="pageNo" [pageSize]="pageSize"  (onPaginationEventEmitter)="onPageChangeEvent($event)" (onChangeEventEmitter)="onChangeEvent()" [width]="'1007px'" [height]="'300px'" [events]="events" [isActionType]="true" ></app-event-detail-table>
         </div>
 
 

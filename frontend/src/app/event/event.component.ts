@@ -20,11 +20,15 @@ export class EventComponent implements OnInit {
   public eventModal: BsModalRef;
   public monthIndex: number;
   public year: number;
+  public date: number;
   public events: any = [];
+  public pageNo: number = 1;
+  public pageSize: number;
 
 
   constructor(private modalService: BsModalService, private eventService: EventService,
-              private toastr: ToastrService) {}
+              private toastr: ToastrService) {
+  }
 
 
   ngOnInit() {
@@ -35,14 +39,14 @@ export class EventComponent implements OnInit {
   // Create event modal open, pre filled with current date
   openModal() {
     this.eventModal = this.modalService.show(EventCreationModalComponent, {
-      initialState :{
+      initialState: {
         type: 'create',
         startTime: moment((new Date())).format(environment.dateTimeFormat),
         endTime: moment((new Date())).format(environment.dateTimeFormat),
 
       }
     });
-    const modal = this.modalService.onHide.subscribe( result => {
+    const modal = this.modalService.onHide.subscribe(result => {
       this.eventTable.ReloadData();
       modal.unsubscribe();
     });
@@ -65,11 +69,33 @@ export class EventComponent implements OnInit {
   }
 
 
-  // this event is emitted
+  // this event is emitted from eventTable with month year and date
   onEventTableCellClicked(event) {
-    this.events = event.event;
+    console.log(event);
 
+    this.pageNo = 1;
+    this.pageSize = 5;
+    this.monthIndex = event.month;
+    this.year = event.year;
+    this.date = event.date;
+    this.eventService.getEvents(event.year, event.month, event.date).then(data => {
+      this.events = data;
+    }).catch(err => {
+      this.toastr.error(err.message);
+    });
 
   }
 
+
+  onPageChangeEvent(event) {
+
+    this.pageNo = event.pageNo;
+    this.pageSize = event.pageSize;
+    this.eventService.getEvents(this.year, this.monthIndex, this.date, event.pageNo, event.pageSize).then(data => {
+
+      this.events = data;
+
+    })
+
+  }
 }

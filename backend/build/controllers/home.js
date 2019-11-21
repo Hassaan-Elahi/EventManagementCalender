@@ -41,6 +41,15 @@ var event_1 = require("../entity/event");
 var moment = require("moment");
 var environment_1 = require("../environment");
 var typeorm_2 = require("typeorm");
+function getDates(startDate, stopDate) {
+    var dateArray = [];
+    var currentDate = startDate;
+    while (currentDate.getDate() <= stopDate.getDate()) {
+        dateArray.push((new Date(currentDate)).getDate());
+        currentDate.setDate(currentDate.getDate() + 1);
+    }
+    return dateArray;
+}
 function deleteEvent(req, res) {
     return __awaiter(this, void 0, void 0, function () {
         var id, eventRepo, e_1;
@@ -55,7 +64,7 @@ function deleteEvent(req, res) {
                     return [4 /*yield*/, eventRepo.delete(id)];
                 case 2:
                     _a.sent();
-                    res.status(200).json({ deleted: true });
+                    res.status(204).json({ deleted: true });
                     return [3 /*break*/, 4];
                 case 3:
                     e_1 = _a.sent();
@@ -69,35 +78,43 @@ function deleteEvent(req, res) {
 exports.deleteEvent = deleteEvent;
 function getAllEventsMinimal(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var date, eventRepo, month, year, events, e_2;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
+        var date, eventRepo, month, year, events, dateEvent, _i, events_1, e, dates, _a, dates_1, d, e_2;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
                 case 0:
                     date = new Date(req.query.year, req.query.month);
                     eventRepo = typeorm_1.getRepository(event_1.Event);
                     month = date.getMonth() + 1;
                     year = date.getFullYear();
-                    _a.label = 1;
+                    _b.label = 1;
                 case 1:
-                    _a.trys.push([1, 3, , 4]);
+                    _b.trys.push([1, 3, , 4]);
                     return [4 /*yield*/, eventRepo.createQueryBuilder('event')
                             .where("event.user = :id", { id: res.locals.currentUserId })
                             .andWhere(new typeorm_2.Brackets(function (q) {
-                            q.where("date_part('month', event.start_time) = :givenMonth", { givenMonth: month });
+                            q.where("(date_part('month', event.start_time) = :givenMonth", { givenMonth: month });
                             q.andWhere("date_part('year', event.start_time) = :givenYear", { givenYear: year });
                         }))
                             .orWhere(new typeorm_2.Brackets(function (q) {
                             q.where("date_part('month', event.end_time) = :givenMonth", { givenMonth: month });
-                            q.andWhere("date_part('year', event.end_time) = :givenYear", { givenYear: year });
+                            q.andWhere("date_part('year', event.end_time) = :givenYear)", { givenYear: year });
                         }))
                             .getMany()];
                 case 2:
-                    events = _a.sent();
-                    console.log(events);
-                    res.status(200).json({ events: events });
+                    events = _b.sent();
+                    dateEvent = {};
+                    for (_i = 0, events_1 = events; _i < events_1.length; _i++) {
+                        e = events_1[_i];
+                        dates = getDates(e.start_time, e.end_time);
+                        for (_a = 0, dates_1 = dates; _a < dates_1.length; _a++) {
+                            d = dates_1[_a];
+                            dateEvent[d] = true;
+                        }
+                    }
+                    res.status(200).json({ dateEvent: dateEvent });
                     return [3 /*break*/, 4];
                 case 3:
-                    e_2 = _a.sent();
+                    e_2 = _b.sent();
                     res.status(500).json({ message: e_2 });
                     return [3 /*break*/, 4];
                 case 4: return [2 /*return*/];
@@ -108,24 +125,35 @@ function getAllEventsMinimal(req, res) {
 exports.getAllEventsMinimal = getAllEventsMinimal;
 function getEvents(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var event, month, year, date, givenDate, eventRepo, err_1;
+        var offset, pageSize, month, year, date, startDuration, endDuration, eventRepo, events, err_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
+                    offset = parseInt(req.query.pageNo) - 1;
+                    pageSize = parseInt(req.query.pageSize);
+                    offset = offset * pageSize;
                     month = req.params.month;
                     year = req.params.year;
                     date = req.params.date;
-                    givenDate = new Date(year, month, date);
+                    startDuration = new Date(year, month, date);
+                    endDuration = new Date(startDuration);
+                    endDuration.setHours(endDuration.getHours() + 24);
                     eventRepo = typeorm_1.getRepository(event_1.Event);
+                    events = null;
                     _a.label = 1;
                 case 1:
                     _a.trys.push([1, 3, , 4]);
-                    return [4 /*yield*/, eventRepo.find({
-                            where: { userId: res.locals.currentUserId, start_time: typeorm_2.MoreThanOrEqual(givenDate), end_time: typeorm_2.LessThanOrEqual(givenDate) },
-                        })];
+                    return [4 /*yield*/, eventRepo.createQueryBuilder('event')
+                            .where("event.user = :id", { id: res.locals.currentUserId })
+                            .andWhere("not (end_time <= :start OR start_time >= :end)", { start: startDuration, end: endDuration })
+                            .orderBy('event.id')
+                            .limit(pageSize)
+                            .offset(offset)
+                            .getMany()];
                 case 2:
-                    event = _a.sent();
-                    res.status(200).json(event);
+                    events = _a.sent();
+                    console.log(events);
+                    res.status(200).json(events);
                     return [3 /*break*/, 4];
                 case 3:
                     err_1 = _a.sent();
@@ -189,7 +217,7 @@ function createEvent(req, res) {
                     return [4 /*yield*/, eventRepo.save(event)];
                 case 4:
                     _b.sent();
-                    res.status(200).json({ message: "Event Saved Successfully" });
+                    res.status(201).json({ message: "Event Saved Successfully" });
                     return [3 /*break*/, 6];
                 case 5:
                     e_3 = _b.sent();
@@ -264,7 +292,7 @@ function updateEvent(req, res) {
                     return [4 /*yield*/, eventRepo.save(event)];
                 case 4:
                     _b.sent();
-                    res.status(200).json({ message: "Event Saved Successfully" });
+                    res.status(204).json({ message: "Event Saved Successfully" });
                     return [3 /*break*/, 6];
                 case 5:
                     e_4 = _b.sent();

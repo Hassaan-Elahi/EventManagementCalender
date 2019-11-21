@@ -5,6 +5,7 @@ import router from "./routes";
 import * as cors from 'cors';
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
+const compression = require('compression');
 const PORT = 3000;
 
 // Connects to the messageDataDatabase -> then starts the express
@@ -25,6 +26,7 @@ createConnection()
 		app.use(bodyParser.urlencoded({ extended: false }));
 		app.use(bodyParser.json());
 		app.use(cookieParser());
+		app.use(compression());
 		app.use('/', router);
 		
 		const server = app.listen(PORT, () => {

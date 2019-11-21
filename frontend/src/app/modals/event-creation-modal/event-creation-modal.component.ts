@@ -13,6 +13,7 @@ import {environment} from "../../../environments/environment";
 })
 export class EventCreationModalComponent implements OnInit {
 
+  @Output() updatedValueEmitter: EventEmitter<any>  = new EventEmitter();
   public id: any = null;
   public name: string = "";
   public startTime: any = null;
@@ -22,7 +23,8 @@ export class EventCreationModalComponent implements OnInit {
 
 
   constructor(public modalRef: BsModalRef, public tostr: ToastrService,
-              public eventService: EventService) { }
+              public eventService: EventService,
+              public modalService: BsModalService) { }
 
 
   ngOnInit()
@@ -63,16 +65,15 @@ export class EventCreationModalComponent implements OnInit {
 
   onSaveEvent()
   {
-    //.utc().format() converts into utc and outputs time into utc format
-    //.local().format() converts into local and outputs time into local format
     const event = { name: this.name, startTime: this.startTime, endTime: this.endTime, description: this.description,};
 
     if(this.IsEventValid(event)) {
 
-      const sTime = moment(this.startTime, environment.dateTimeFormat);
-      const eTime = moment(this.endTime, environment.dateTimeFormat);
-
-      const data = { name: this.name, startTime: ( new Date(this.startTime).toUTCString()), endTime: (new Date(this.endTime).toUTCString()), description: this.description,};
+      const data = { name: this.name,
+        startTime: ( new Date(this.startTime).toUTCString()),
+        endTime: (new Date(this.endTime).toUTCString()),
+        description: this.description
+        };
       this.eventService.createEvent(data)
           .then(res => {
 
@@ -94,21 +95,27 @@ export class EventCreationModalComponent implements OnInit {
 
     if (this.IsEventValid(event)) {
 
-      const sTime = moment(this.startTime);
-      const eTime = moment(this.endTime);
+      let sTime: any = moment(this.startTime);
+      let eTime: any = moment(this.endTime);
+      sTime = new Date(sTime.format(environment.dateTimeFormat));
+      eTime = new Date(eTime.format(environment.dateTimeFormat));
 
       const data = {
         id: this.id,
         name: this.name,
-        startTime: sTime.utc().format(environment.dateTimeFormat),
-        endTime: eTime.utc().format(environment.dateTimeFormat),
+        startTime: sTime.toISOString(),
+        endTime: eTime.toISOString(),
         description: this.description,
       };
+
       this.eventService.updateEvent(data)
           .then(res => {
 
             this.tostr.success("Event has been update successfully");
-            this.modalRef.hide()
+            this.modalService.setDismissReason(JSON.stringify(data));
+            this.modalRef.hide();
+
+
 
           })
           .catch(err => {
@@ -123,7 +130,7 @@ export class EventCreationModalComponent implements OnInit {
   onDeleteEvent() {
 
     this.eventService.deleteEvent(this.id).then( res => {
-      this.tostr.success("Event has been deleted successfully")
+      this.tostr.success("Event has been deleted successfully");
       this.modalRef.hide();
 
     }).catch(err => {

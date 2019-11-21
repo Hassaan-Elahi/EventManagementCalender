@@ -10,10 +10,10 @@ export class Event {
 	@Column()
 	name: string;
 
-	@Column()
+	@Column({ type: 'timestamptz' })
 	start_time: Date;
 
-	@Column()
+	@Column({ type: 'timestamptz' })
 	end_time: Date;
 	
 	@Column()
