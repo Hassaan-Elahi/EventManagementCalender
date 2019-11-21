@@ -41,6 +41,7 @@ var typeorm_1 = require("typeorm");
 var routes_1 = require("./routes");
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var compression = require('compression');
 var PORT = 3000;
 // Connects to the messageDataDatabase -> then starts the express
 typeorm_1.createConnection()
@@ -60,6 +61,7 @@ typeorm_1.createConnection()
         app.use(bodyParser.urlencoded({ extended: false }));
         app.use(bodyParser.json());
         app.use(cookieParser());
+        app.use(compression());
         app.use('/', routes_1.default);
         server = app.listen(PORT, function () {
             console.log("Worker " + process.pid + " started on port " + PORT + "!");
