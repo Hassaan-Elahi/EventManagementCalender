@@ -35,24 +35,35 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var excludePassword1574063967534 = /** @class */ (function () {
-    function excludePassword1574063967534() {
+var aws1574429198509 = /** @class */ (function () {
+    function aws1574429198509() {
     }
-    excludePassword1574063967534.prototype.up = function (queryRunner) {
+    aws1574429198509.prototype.up = function (queryRunner) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, queryRunner.query("CREATE TABLE \"user\" (\"id\" uuid NOT NULL DEFAULT uuid_generate_v4(), \"email\" character varying NOT NULL, \"password\" character varying NOT NULL, \"name\" character varying NOT NULL, CONSTRAINT \"UQ_e12875dfb3b1d92d7d7c5377e22\" UNIQUE (\"email\"), CONSTRAINT \"PK_cace4a159ff9f2512dd42373760\" PRIMARY KEY (\"id\"))", undefined)];
+                    case 1:
+                        _a.sent();
+                        return [4 /*yield*/, queryRunner.query("CREATE TABLE \"event\" (\"id\" uuid NOT NULL DEFAULT uuid_generate_v4(), \"name\" character varying NOT NULL, \"start_time\" TIMESTAMP WITH TIME ZONE NOT NULL, \"end_time\" TIMESTAMP WITH TIME ZONE NOT NULL, \"description\" character varying NOT NULL, \"userId\" uuid, CONSTRAINT \"PK_30c2f3bbaf6d34a55f8ae6e4614\" PRIMARY KEY (\"id\"))", undefined)];
+                    case 2:
+                        _a.sent();
+                        return [4 /*yield*/, queryRunner.query("ALTER TABLE \"event\" ADD CONSTRAINT \"FK_01cd2b829e0263917bf570cb672\" FOREIGN KEY (\"userId\") REFERENCES \"user\"(\"id\") ON DELETE NO ACTION ON UPDATE NO ACTION", undefined)];
+                    case 3:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    aws1574429198509.prototype.down = function (queryRunner) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 return [2 /*return*/];
             });
         });
     };
-    excludePassword1574063967534.prototype.down = function (queryRunner) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                return [2 /*return*/];
-            });
-        });
-    };
-    return excludePassword1574063967534;
+    return aws1574429198509;
 }());
-exports.excludePassword1574063967534 = excludePassword1574063967534;
-//# sourceMappingURL=1574063967534-excludePassword.js.map
+exports.aws1574429198509 = aws1574429198509;
+//# sourceMappingURL=1574429198509-aws.js.map
